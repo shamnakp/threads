@@ -1,0 +1,361 @@
+<%- include('../layout/admin-header.ejs' )%>
+
+
+    <section class="content-main">
+        <div class="content-header">
+            <h2 class="content-title">Sales Report</h2>
+            <div>
+                <a href="#" id="createSalesReport" class="btn btn-primary"><i
+                        class="text-muted material-icons md-post_add"></i>Create
+                    report PDF</a>
+                <a href="#" id="createSalesReport-csv" class="btn btn-primary"><i
+                        class="text-muted material-icons md-post_add"></i>Create
+                    report CSV</a>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <header class="card-header">
+                <div class="row gx-3">
+                    <!-- Date Inputs and Filter Button -->
+                    <div class="row">
+                        <p class="text-center" style="color: rgb(175, 21, 21);" id="dateError"></p>
+                        <div class="col-lg-3 col-md-3 me-auto">
+                            <p class="text-center text-info">Starting Date</p>
+                            <input type="date" value="" id="startingDate" class="form-control">
+                        </div>
+                        <div class="col-lg-3 col-md-3 me-auto">
+                            <p class="text-center text-info">Ending Date</p>
+                            <input type="date" id="endingDate" class="form-control">
+
+                        </div>
+                        <div class="col-lg-3 col-md-3  mb-3">
+                            <p>.</p>
+                            <button class="btn btn-primary" id="dateWiseFilterBtn">Filter</button>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-6 mt-4">
+                            <select class="form-select" onchange="filter(this.value)">
+                                <option value="0">All</option>
+                                <option value="1">Today</option>
+                                <option value="2">Weekly</option>
+                                <option value="3">Monthly</option>
+                                <option value="4">Yearly</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </header>
+            <!-- Contents of our table -->
+            <div class="card-body" id="orderList">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="salesTable">
+                        <thead style="text-align: center;">
+                            <tr>
+                                <th>OrderId</th>
+                                <th>Product Name</th>
+                                <th>Date</th>
+                                <th>Regular Price</th>
+                                <th>Dicount</th>
+                                <th>Selling Price</th>
+                                <th>QTY</th>
+                                <th>Payment</th>
+                                <th>Total Amount</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody style="text-align: center;">
+                            <% if (orders.length) { %>
+                                <% for( let i=0; i < orders.length; i++ ) { %>
+                                    <tr>
+                                        <td width="25%">
+                                            <div>
+                                                <p><%- orders[i]._id %></p>
+                                            </div>
+                                            </a>
+                                        </td>
+                                        <td><%= orders[i].product[0].title %></td>
+                                        <td><%- orders[i].createdOn.toLocaleDateString() %></td>
+                                        <td><%- orders[i].regularPrice %></td>
+                                        <td><%- Math.round(orders[i].regularPrice - orders[i].totalPrice) %></td>
+                                        <td><%- orders[i].product[0].price %></td>
+                                        <td><%- orders[i].product[0].quantity %></td>
+                                        <td><%- orders[i].payment %></td>
+                                        <td>&#x20B9; <%- Math.round(orders[i].totalPrice) %></td>
+                                        
+                                    </tr>
+                                    <% } %>
+                                        <% } %>
+                        </tbody>
+                    </table> <!-- table-responsive.// -->
+                </div>
+            </div>
+        </div>
+
+    </section> <!-- content-main end// -->
+    </main>
+    <script>
+        document.getElementById('startingDate').valueAsDate = new Date();
+    </script>
+
+    <!-- Data passing for filtering -->
+    <script>
+        // Frequent option function calling
+        async function filter(Number) {
+            if (Number) {
+                try {
+                    const response = await fetch(`/api/admin/filter-sales/?identify=${Number}`);
+                    const data = await response.json();
+                    const orders = data.orders;
+
+                    const orderListDiv = document.getElementById('orderList');
+                    if (!orderListDiv) {
+                        console.error("Element with ID 'orderList' not found in HTML");
+                        return;
+                    }
+                    const orderListHTML = `
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="salesTable">
+                            <thead>
+                                <tr>
+                                    <th>OrderId</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${orders.length > 0 ?
+                            orders.map(order => `
+                                        <tr>
+                                            <td width="40%">
+                                                <div>
+                                                    <p>${order._id}</p>
+                                                </div>
+                                            </td>
+                                            <td>${(new Date(order.createdOn)).toLocaleDateString()}</td>
+                                            <td>₹${order.totalPrice}</td>
+                                            
+                                        </tr>
+                                    `).join('') :
+                            '<tr><td colspan="3" class="text-center" style="color:red">No order occur</td></tr>'
+                        }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+                    orderListDiv.innerHTML = orderListHTML;
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        }
+
+        // Date wise filtering 
+
+        document.getElementById('dateWiseFilterBtn').addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            const isValid = validateInputDate();
+
+            if (isValid) {
+                const startingDate = document.getElementById('startingDate').value;
+                const endingDate = document.getElementById('endingDate').value;
+                // console.log(startingDate)
+                // console.log(endingDate)
+
+                const response = await fetch('/api/admin/datewise-filter-sales', {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ startingDate, endingDate })
+                })
+
+                const result = await response.json()
+                const orders = result.orders
+                const orderListDiv = document.getElementById('orderList');
+
+                const orderListHTML = `
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="salesTable">
+                            <thead>
+                                <tr>
+                                    <th>OrderId</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${orders.length > 0 ?
+                        orders.map(order => `
+                                        <tr>
+                                            <td width="40%">
+                                                <div>
+                                                    <p>${order._id}</p>
+                                                </div>
+                                            </td>
+                                            <td>${(new Date(order.createdOn)).toLocaleDateString()}</td>
+                                            <td>₹${order.totalPrice}</td>
+                                        </tr>
+                                    `).join('') :
+                        '<tr><td colspan="3" class="text-center" style="color:red">No order occur</td></tr>'
+                    }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+                orderListDiv.innerHTML = orderListHTML;
+            } else {
+                console.log('Not proper data')
+            }
+        })
+
+
+        // Date form validation
+        function validateInputDate() {
+            const startingDate = document.getElementById('startingDate').value;
+            const endingDate = document.getElementById('endingDate').value;
+
+            let isValid = true;
+
+            // Checking the start and end logic
+
+            if (dateValidate(startingDate, endingDate) === false) {
+                document.getElementById('dateError').textContent = 'Check your dates'
+                document.getElementById('startingDate').style.borderColor = 'red'
+                document.getElementById('endingDate').style.borderColor = 'red'
+                setTimeout(() => {
+                    document.getElementById('dateError').textContent = ''
+                    document.getElementById('startingDate').style.borderColor = ''
+                    document.getElementById('endingDate').style.borderColor = ''
+                }, 5000)
+                isValid = false;
+            }
+
+
+
+            return isValid;
+        }
+        function dateValidate(startingDate, endingDate) {
+            const created = new Date(startingDate);
+            const expire = new Date(endingDate);
+            return created <= expire;
+        }
+    </script>
+
+    <!-- Creating Sales Report -->
+    <script>
+        document.getElementById('createSalesReport').addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            // Get a reference to the table
+            const salesTable = document.getElementById('salesTable');
+
+            // Get the table body
+            const tableBody = salesTable.querySelector('tbody');
+
+            const salesData = []
+            // Iterate through rows in the table
+            for (const row of tableBody.rows) {
+                // Access individual cells in the row
+                const orderId = row.cells[0].textContent.trim();
+                const date = row.cells[1].textContent;
+                let totalAmount = row.cells[2].textContent.trim();
+                totalAmount = parseFloat(totalAmount.replace(/[^0-9]/g, ''), 10);
+                // Do something with these values, for example, log them
+
+                const orderData = {
+                    orderId: orderId,
+                    date: date,
+                    totalAmount: totalAmount
+                }
+
+                salesData.push(orderData);
+            }
+
+
+            try {
+                const response = await fetch('/api/admin/generate-pdf', {
+                    method: 'post',
+                    headers: {
+                        "Content-Type": 'application/json'
+                    },
+                    body: JSON.stringify(salesData)
+                })
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'report.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } else {
+                    console.error('Failed to generate PDF');
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+
+        })
+
+
+    </script>
+    <script>
+        document.getElementById('createSalesReport-csv').addEventListener('click', async (event) => {
+            event.preventDefault();
+    
+            // Get the table body
+            const tableBody = document.querySelector('#salesTable tbody');
+    
+            const salesData = [];
+            // Iterate through rows in the table
+            for (const row of tableBody.rows) {
+                // Access individual cells in the row
+                const orderId = row.cells[0].textContent.trim();
+                const date = row.cells[1].textContent;
+                let totalAmount = row.cells[2].textContent.trim();
+                totalAmount = parseFloat(totalAmount.replace(/[^0-9]/g, ''), 10);
+    
+                const orderData = {
+                    orderId: orderId,
+                    date: date,
+                    totalAmount: totalAmount
+                };
+    
+                salesData.push(orderData);
+            }
+    
+            try {
+                const response = await fetch('/api/admin/generate-csv', {
+                    method: 'post',
+                    headers: {
+                        "Content-Type": 'application/json'
+                    },
+                    body: JSON.stringify(salesData)
+                });
+    
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'report.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } else {
+                    console.error('Failed to generate CSV');
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        });
+    </script>   
+
+    <%- include('../layout/admin-footer.ejs' )%>

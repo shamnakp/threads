@@ -1,0 +1,84 @@
+
+<%- include('../layout/admin-header.ejs' )%>
+
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Edit Categories </h2>
+                </div>
+                <div>
+                    <input type="text" placeholder="Search Categories" class="form-control bg-white">
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!--Catergory adding form-->
+                            <form method="post" action="/api/admin/updateCategory"   id="categoryForm" onsubmit="return validateForm()">
+                                <div class="mb-4">
+                                    <label for="name" class="form-label">Category Name</label>
+                                    <input id="name" name="name"  value="<%- user.name %>" type="text" placeholder="Type here"
+                                        class="form-control" />
+                                    <p id="name-error" style="color: red;"></p>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Description</label>
+                                    <textarea id="discription"  name="discription" placeholder="Type here"
+                                        class="form-control"><%- user.discription %></textarea>
+                                    <p id="description-error" style="color: red;"></p>
+                                </div>
+                                <input type="text" hidden name="id" value="<%- user._id %>">
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Edit</button>
+                                </div>
+                                    <%  if(typeof message !== "undefined"){ %>
+                                    <p style="color: red;"><%= message %></p>
+                                    <% } %>
+                            </form>
+                        </div>
+
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div> <!-- card .// -->
+        </section> <!-- content-main end// -->
+    </main>
+    <script>
+        function validateForm() {
+            // Reset any existing error messages
+            clearErrorMessages();
+    
+            const name = document.getElementById('name').value;
+            const description = document.getElementsByName('discription')[0].value;
+    
+            let isValid = true; 
+    
+            // Check if name is empty
+            if (name.trim() === '') {
+                displayErrorMessage('name-error', 'Please enter a category name.');
+                isValid = false;
+            }
+    
+
+            // Check if description is empty
+            if (description.trim() === '') {
+                displayErrorMessage('description-error', 'Please enter a category description.');
+                isValid = false;
+            }
+    
+            return isValid; // Form is valid
+        }
+    
+        function displayErrorMessage(errorId, message) {
+            const errorDiv = document.getElementById(errorId);
+            errorDiv.innerText = message;
+        }
+    
+        function clearErrorMessages() {
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach((errorMessage) => {
+                errorMessage.innerText = '';
+            });
+        }
+    </script>
+   <%- include('../layout/admin-footer.ejs' )%>

@@ -1,0 +1,118 @@
+
+<%- include('../layout/admin-header.ejs' )%>
+
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Category List </h2>
+                    <p>You can 'Edit' 'List/UnList' 'Delete' the Category</p>
+                </div>
+                <div>
+                    <a href="/api/admin/addCategory" class="btn btn-primary btn-sm rounded">Add New Category</a>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <!-- card-body start// -->
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="listCategoryTable" class="table table-hover">
+                            <thead class=" table-dark">
+                                <tr>
+                                    <th>SI:</th>
+                                    <th scope="col">Category Name</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Edit</th>
+                                    <!-- <th scope="col">Delete</th> -->
+                                    <th scope="col">Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (categories.length>0) { %>
+                                    <% for( let i=0; i < categories.length; i++ ) { %>
+                                        <tr>
+                                            <td><%- i+1 %></td>
+                                            <td><b><%- categories[i].name %></b></td>
+                                            <td><b><%- categories[i].discription %></b></td>
+                                            <td class="">
+                                                <a href="/api/admin/editCategory?id=<%- categories[i]._id %>"
+                                                    class="btn btn-md-edit rounded font-sm">Edit</a>
+                                            </td>
+                                            <td class="">
+                                                <a href="/api/admin/deleteCategory?id=<%= categories[i]._id %>" 
+                                                    class="btn btn-md-edit rounded font-sm">Delete</a>
+                                            </td>                                                                                                                                     
+                                        </tr>
+                                        <% } %>
+                                            <% }else{ %>
+                                                <tr>
+                                                    <td colspan="6">
+                                                        <h1>Category not found</h1>
+                                                    </td>
+                                                </tr>
+                                                <% } %>
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive //end -->
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+        </section> <!-- content-main end// -->
+    </main>
+    <script>
+        document.addEventListener('click', async (event) => {
+            if (event.target.matches('.unlist-btn')) {
+                event.preventDefault()
+
+                const result = await Swal.fire({
+                    title: "Confirm Unlisting",
+                    text: "Are you sure you want to unlist this category?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#990f0f',
+                    confirmButtonText: 'Yes, Unlist',
+                    cancelButtonText: 'Cancel'
+                })
+
+                if (result.isConfirmed) {
+                    location.href = event.target.href;
+                }
+            }
+            if (event.target.matches('.list-btn')) {
+                event.preventDefault();
+
+                const confirmed = await Swal.fire({
+                    title: "Confirm List Action",
+                    text: "Are you certain you wish to perform this action?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#990f0f',
+                    confirmButtonText: 'Yes, Proceed',
+                    cancelButtonText: 'Cancel'
+
+                });
+                if (confirmed.isConfirmed) {
+                    location.href = event.target.href;
+                }
+            }
+        })
+    </script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        new DataTable('#listCategoryTable', {
+            columnDefs: [
+                { "className": "dt-center", "targets": "_all" }
+            ],
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <%- include('../layout/admin-footer.ejs' )%>

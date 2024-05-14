@@ -1,0 +1,124 @@
+
+<%- include('../layout/admin-header.ejs' )%>
+
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Users List </h2>
+                    <p>You can 'Edit' and 'Block' the User</p>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <!-- card-body start// -->
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="listUserTable" class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>SI:</th>
+                                    <th scope="col">User Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Mobile</th>
+                                    <!-- <th scope="col">Edit</th> -->
+                                    <th scope="col">Block/Unblock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (users.length>0) { %>
+                                    <% for( let i=0; i < users.length; i++ ) { %>
+                                        <tr>
+                                            <td><%- i+1 %></td>
+                                            <td><b><%- users[i].username %></b></td>
+                                            <td><b><%- users[i].email %></b></td>
+                                            <td><b><%- users[i].mobile %></b></td>
+                                            <!-- <td class="">
+                                                <a href="/api/admin/editUser?id=<%- users[i]._id %>"
+                                                    class="btn btn-md-edit rounded font-sm">Edit</a>
+                                            </td> -->
+                                            <td class="">
+                                                <% if (users[i].is_blocked===true) { %>
+                                                    <a href="/api/admin/unblockUser?id=<%- users[i]._id %>"
+                                                        class="btn btn-md-unblock rounded font-sm unblock-btn">Unblock</a>
+                                                    <% }else{ %>
+                                                        <a href="/api/admin/blockUser?id=<%- users[i]._id %>"
+                                                            class="btn btn-md-block rounded font-sm block-btn">Block</a>
+                                                        <% } %>
+
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td style="text-align: center;" colspan="6">
+                                                        <h1>No users found</h1>
+                                                    </td>
+                                                </tr>
+                                                <% } %>
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive //end -->
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+        </section> <!-- content-main end// -->
+    </main>
+    <script>
+
+        /// Its for block User
+
+        document.addEventListener('click', async (event) => {
+            if (event.target.matches('.block-btn')) {
+                event.preventDefault();
+
+                const response = await Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This action will block the user.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, block!',
+                    cancelButtonText: 'Cancel'
+
+                })
+                if (response.isConfirmed) {
+                    location.href = event.target.href;
+                }
+
+            }
+        })
+
+        // For unblocking the user
+
+        document.addEventListener('click', async (event) => {
+            if (event.target.matches('.unblock-btn')) {
+                event.preventDefault();
+
+                const response = await Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This action will unblock the user.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, Unblock!',
+                    cancelButtonText: 'Cancel'
+
+                })
+                if (response.isConfirmed) {
+                    location.href = event.target.href;
+                }
+
+            }
+        })
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        new DataTable('#listUserTable', {
+            columnDefs: [
+                { "className": "dt-center", "targets": "_all" }
+            ],
+        });
+    </script>
+  <%- include('../layout/admin-footer.ejs' )%>

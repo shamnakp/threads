@@ -1,0 +1,244 @@
+<%- include('../layout/header.ejs' )%>
+
+<main class="main">
+  <div class="page-header breadcrumb-wrap">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html" rel="nofollow">Home</a>
+        <span></span> Edit Address
+      </div>
+    </div>
+  </div>
+  <section class="pt-150 pb-150">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 m-auto">
+          <div class="row justify-content-center">
+            <div class="col-md-8">
+              <div class="tab-content dashboard-content">
+                <!-- card for the dash bord user simple details -->
+
+                <div class="card">
+                  <div class="card-header">
+                    <h5>Edit Address</h5>
+                  </div>
+                  <div class="card-body">
+                    <form
+                      method="post"
+                      action="/api/editAddress"
+                      name="editForm"
+                      onsubmit="return validation()"
+                    >
+                      <div class="row">
+                        <div class="form-group col-md-12">
+                          <label><h5>Full Name</h5></label>
+                          <input
+                            class="form-control square"
+                            value="<%= address.fullName %>"
+                            name="fullName"
+                            type="text"
+                          />
+                          <p id="nameError" style="color: red"></p>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                          <label><h5>Mobile number</h5></label>
+                          <input
+                            class="form-control square"
+                            value="<%= address.mobile %>"
+                            name="mobile"
+                            type="text"
+                          />
+                          <p id="mobileError" style="color: red"></p>
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label><h5>Pincode</h5></label>
+                          <input
+                            class="form-control square"
+                            value="<%= address.pinCode %>"
+                            name="pinCode"
+                            type="text"
+                          />
+                          <p id="pincodeError" style="color: red"></p>
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label
+                            ><h5>
+                              Flat, House no., Building, Company, Apartment
+                            </h5></label
+                          >
+                          <input
+                            class="form-control square"
+                            value="<%= address.addressLine %>"
+                            name="addressLine"
+                            type="text"
+                          />
+                          <p id="addressLineError" style="color: red"></p>
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label> <h5>Area, Street, Sector, Village</h5></label>
+                          <input
+                            class="form-control square"
+                            name="areaStreet"
+                            value=" <%= address. areaStreet %>"
+                            type="text"
+                          />
+                          <p id="areaStreetError" style="color: red"></p>
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label><h5>Landmark</h5> </label>
+                          <input
+                            class="form-control square"
+                            name="ladmark"
+                            value=" <%= address.ladmark %>"
+                            type="text"
+                          />
+                          <p id="landmarkError" style="color: red"></p>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label><h5>Town/City</h5> </label>
+                          <input
+                            class="form-control square"
+                            name="townCity"
+                            value="<%= address.townCity %>"
+                            type="text"
+                          />
+                          <p id="townCityError" style="color: red"></p>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label><h5>State</h5> </label>
+                          <input
+                            class="form-control square"
+                            name="state"
+                            value="<%= address.state %>"
+                            type="text"
+                          />
+                          <p id="stateError" style="color: red"></p>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                          <label><h5>Adress</h5> </label>
+                          <input
+                            class="form-control square"
+                            name="adressType"
+                            value="<%= address.adressType %>"
+                            type="text"
+                          />
+                          <p id="addressTypeError" style="color: red"></p>
+                        </div>
+                        <input
+                          type="hidden"
+                          name="id"
+                          value="<%=address._id %>"
+                        />
+                        <div class="col-md-12">
+                          <button
+                            type="submit"
+                            class="btn btn-fill-out submit"
+                            name="submit"
+                            value="Submit"
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+  function validation() {
+    let name = document.forms["editForm"]["fullName"].value;
+    let mobile = document.forms["editForm"]["mobile"].value;
+    let pincode = document.forms["editForm"]["pinCode"].value;
+    let addressLine = document.forms["editForm"]["addressLine"].value;
+    let areaStreet = document.forms["editForm"]["areaStreet"].value;
+    let landmark = document.forms["editForm"]["ladmark"].value; // corrected from "fullName"
+    let townCity = document.forms["editForm"]["townCity"].value;
+    let state = document.forms["editForm"]["state"].value;
+    let addressType = document.forms["editForm"]["adressType"].value; // corrected from "fullName"
+
+    const nameRegex = /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/;
+    const mobileRegex = /^\d{10}$/;
+    const pincodeRegex = /^\d{6}$/;
+    const addressLineRegex = /^[a-zA-Z0-9\s,'-]*$/;
+    const areaStreetRegex = /^[a-zA-Z0-9\s,'-]*$/;
+    const landmarkRegex = /^[a-zA-Z0-9\s,'-]*$/;
+    const townCityRegex = /^[a-zA-Z\s,'-]*$/;
+    const stateRegex = /^[a-zA-Z\s,'-]*$/;
+    const addressTypeRegex = /^[a-zA-Z\s,'-]*$/;
+
+    // Reset error messages
+    document
+      .querySelectorAll(".error-message")
+      .forEach((field) => (field.textContent = ""));
+
+    if (name.trim() === "") {
+      document.getElementById("nameError").innerText = "Please enter a name.";
+      return false;
+    } else if (!name.match(nameRegex)) {
+      document.getElementById("nameError").innerText =
+        "Name can only contain letters";
+      return false;
+    }
+
+    if (!mobile.match(mobileRegex)) {
+      document.getElementById("mobileError").innerText =
+        "Please enter a valid mobile number.";
+      return false;
+    }
+
+    if (!pincode.match(pincodeRegex)) {
+      document.getElementById("pincodeError").innerText =
+        "Please enter a valid pincode number.";
+      return false;
+    }
+
+    if (!addressLine.match(addressLineRegex)) {
+      document.getElementById("addressLineError").innerText =
+        "Please enter a valid house number.";
+      return false;
+    }
+
+    if (!areaStreet.match(areaStreetRegex)) {
+      document.getElementById("areaStreetError").innerText =
+        "Please enter a valid Area Street.";
+      return false;
+    }
+
+    if (!landmark.match(landmarkRegex)) {
+      document.getElementById("landmarkError").innerText =
+        "Please enter a valid Landmark.";
+      return false;
+    }
+
+    if (!townCity.match(townCityRegex)) {
+      document.getElementById("townCityError").innerText =
+        "Please enter a valid Town City.";
+      return false;
+    }
+
+    if (!state.match(stateRegex)) {
+      document.getElementById("stateError").innerText =
+        "Please enter a valid state.";
+      return false;
+    }
+
+    if (!addressType.match(addressTypeRegex)) {
+      document.getElementById("addressTypeError").innerText =
+        "Please enter a valid address Type";
+      return false;
+    }
+
+    return true;
+  }
+</script>
+
+<%- include('../layout/footer.ejs' )%>

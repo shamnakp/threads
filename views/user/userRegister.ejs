@@ -1,0 +1,161 @@
+<%- include('../layout/header.ejs' ) %>
+
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/api" rel="nofollow">Home</a>
+                    <span></span>
+                    <a href="/api/login" rel="nofollow">Login</a>
+                    <span></span>Register
+                </div>
+            </div>
+        </div>
+
+        <section class="pt-150 pb-150 pd-2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="row">
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-6">
+                                <div class="login_wrap widget-taber-content p-30 background-white border-radius-5">
+                                    <div class="padding_eight_all bg-white">
+                                        <div class="heading_s1">
+                                            <h3 class="mb-30">Create an Account</h3>
+                                        </div>
+                                        <p class="mb-50 font-sm">
+                                            Your personal data will be used to support your experience throughout this
+                                            website, to manage access to your account, and for other purposes described
+                                            in our privacy policy
+                                        </p>
+                                        <form name="registrationForm" action="/api/register" method="post"
+                                            onsubmit="return validate()">
+                                            <div class="form-group">
+                                                <input type="text" name="username" placeholder="Username">
+                                                <p id="nameError" style="color: red;"></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" name="email" placeholder="Email">
+                                                <p id="emailError" style="color: red;"></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" name="mobile" placeholder="Mobile Number">
+                                                <p id="mobileError" style="color: red;"></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="password" name="password" placeholder="Password">
+                                                <p id="passwordError" style="color: red;"></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="password" name="confirmPassword"
+                                                    placeholder="Confirm password">
+                                            </div>
+                                            <div class="login_footer form-group">
+                                                <div class="chek-form">
+                                                    <div class="custome-checkbox">
+                                                        <input class="form-check-input" type="checkbox" name="checkbox"
+                                                            id="exampleCheckbox12" value="">
+                                                        <label class="form-check-label" for="exampleCheckbox12"><span>I
+                                                                agree to terms &amp; Policy.</span></label>
+                                                    </div>
+                                                </div>
+                                                <a href="page-privacy-policy.html"><i
+                                                        class="fi-rs-book-alt mr-5 text-muted"></i>Lean more</a>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-fill-out btn-block hover-up"
+                                                    name="login">Submit &amp; Register</button>
+                                            </div>
+                                            <% if(typeof message !=='undefined' ){ %>
+                                                <p style="color: green;">
+                                                    <%= message %>
+                                                </p>
+                                                <% } %>
+                                                    <% if(typeof error !=='undefined' ){ %>
+                                                        <p style="color: rgb(199, 5, 5);">
+                                                            <%= error %>
+                                                        </p>
+                                                        <% } %>
+                                        </form>
+                                        <div class="text-muted text-center">Already have an account? <a
+                                                href="/api/login">Sign in now</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    </div>
+
+    <script>
+        // Function to validate the form
+        function validate() {
+            var username = document.forms["registrationForm"]["username"].value;
+            var email = document.forms["registrationForm"]["email"].value;
+            var mobile = document.forms["registrationForm"]["mobile"].value;
+            var password = document.forms["registrationForm"]["password"].value;
+            var confirmPassword = document.forms["registrationForm"]["confirmPassword"].value;
+
+            // Regular expressions for email and mobile validation
+            var usernameRegex = /^[A-Za-z\s]+$/;
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            var mobileRegex = /^[0-9]+$/;
+            var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+            // Check if username is filled out
+            if (username.trim() === "") {
+                document.getElementById("nameError").innerText = "Please enter a username.";
+                return false;
+            } else if (!username.match(usernameRegex)) {
+                document.getElementById("nameError").innerText = "Username can only letters";
+                return false;
+            } else {
+                document.getElementById("nameError").innerText = "";
+            }
+
+            // Check if email is in proper format
+            if (!email.match(emailRegex)) {
+                document.getElementById("emailError").innerText = "Please enter a valid email address.";
+                return false;
+            } else {
+                document.getElementById("emailError").innerText = "";
+            }
+
+            // Check if mobile number is filled out and in proper format
+            if (!mobile.match(mobileRegex)) {
+                document.getElementById("mobileError").innerText = "Please enter a valid mobile number.";
+                return false;
+            } else {
+                document.getElementById("mobileError").innerText = "";
+            }
+
+            // Check if password is filled out
+            if (password.trim() === "") {
+                document.getElementById("passwordError").innerText = "Please enter a password.";
+                return false;
+            } else if (!password.match(passwordRegex)) {
+                document.getElementById("passwordError").innerText = "Password must contain at least 6 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character.";
+                return false;
+            } else {
+                document.getElementById("passwordError").innerText = "";
+            }
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                return false;
+            }
+
+            // All validations passed, form can be submitted
+            return true;
+        }
+    </script>
+
+
+    <%- include('../layout/footer.ejs' )%>

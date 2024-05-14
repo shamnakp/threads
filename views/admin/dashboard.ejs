@@ -1,0 +1,463 @@
+<%- include('../layout/admin-header.ejs' )%>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Dashboard </h2>
+                <p>Whole data about your business here</p>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-primary-light"><i
+                                class="text-primary material-icons md-monetization_on"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Revenue</h6>
+                            <span>₹<%= Math.round(totalRevenue) %></span>
+                            <span class="text-sm">
+                                Shipping fees are not included
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-success-light"><i
+                                class="text-success material-icons md-local_shipping"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Orders</h6> <span>
+                                <%=orderCount%>
+                            </span>
+                            <span class="text-sm">
+                                Excluding orders in transit
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-warning-light"><i
+                                class="text-warning material-icons md-qr_code"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Products</h6> <span>
+                                <%= productCount%>
+                            </span>
+                            <span class="text-sm">
+                                In <%= categoryCount %> Categories
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-primary-light"><i
+                                class="text-primary material-icons md-monetization_on"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Discount</h6>
+                            <span>₹<%= totalDiscount %></span>
+                            <span class="text-sm">
+                                In <%= orderCount %> Orders
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+           <div class="col-lg-8 d-flex align-items-strech">
+                        <div class="card w-100">
+                            <div class="card-body">
+                                <div>
+                                    <div>
+                                        <canvas id="myChart1" style="width:100%;max-width:800px"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <!-- Yearly Breakup -->
+                                <div class="card overflow-hidden">
+                                    <div class="card-body p-4">
+                                        <h5 class="card-title mb-9 fw-semibold">Category Overview</h5>
+                                        <div >
+                                            <canvas id="myChartCategory"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <!-- Monthly Earnings -->
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="row">
+
+                    <div class="col-lg-7">
+                        <div class="card mb-4">
+                            <article class="card-body">
+                                <h5 class="card-title">Recent activities</h5>
+                                <ul class="verti-timeline list-unstyled font-sm">
+                                    <li class="event-list">
+                                        <div class="event-timeline-dot">
+                                            <i class="material-icons md-play_circle_outline font-xxl"></i>
+                                        </div>
+                                        <div class="media">
+                                            <div class="me-3">
+                                                <h6><span>
+                                                        <%= latestOrders[0].createdOn.toLocaleDateString() %>
+                                                    </span> <i
+                                                        class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i>
+                                                </h6>
+                                            </div>
+                                            <div class="media-body">
+                                                <div>
+                                                    <%= latestOrders[0].status %>: -
+                                                        <%= latestOrders[0].totalPrice %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="event-list active">
+                                        <div class="event-timeline-dot">
+                                            <i
+                                                class="material-icons md-play_circle_outline font-xxl animation-fade-right"></i>
+                                        </div>
+                                        <div class="media">
+                                            <div class="me-3">
+                                                <h6><span>
+                                                        <%= latestOrders[1].createdOn.toLocaleDateString() %>
+                                                    </span> <i
+                                                        class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i>
+                                                </h6>
+                                            </div>
+                                            <div class="media-body">
+                                                <div>
+                                                    <%= latestOrders[1].status %>: -
+                                                        <%= latestOrders[1].totalPrice %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="event-list">
+                                        <div class="event-timeline-dot">
+                                            <i class="material-icons md-play_circle_outline font-xxl"></i>
+                                        </div>
+                                        <div class="media">
+                                            <div class="me-3">
+                                                <h6><span>
+                                                        <%= latestOrders[2].createdOn.toLocaleDateString() %>
+                                                    </span> <i
+                                                        class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i>
+                                                </h6>
+                                            </div>
+                                            <div class="media-body">
+                                                <div>
+                                                    <%= latestOrders[2].status %>: -
+                                                        <%= latestOrders[2].totalPrice %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="event-list">
+                                        <div class="event-timeline-dot">
+                                            <i class="material-icons md-play_circle_outline font-xxl"></i>
+                                        </div>
+                                        <div class="media">
+                                            <div class="me-3">
+                                                <h6><span>
+                                                        <%= latestOrders[3].createdOn.toLocaleDateString() %>
+                                                    </span> <i
+                                                        class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i>
+                                                </h6>
+                                            </div>
+                                            <div class="media-body">
+                                                <div>
+                                                    <%= latestOrders[3].status %>: -
+                                                        <%= latestOrders[3].totalPrice %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="event-list">
+                                        <div class="event-timeline-dot">
+                                            <i class="material-icons md-play_circle_outline font-xxl"></i>
+                                        </div>
+                                        <div class="media">
+                                            <div class="me-3">
+                                                <h6><span>
+                                                        <%= latestOrders[4].createdOn.toLocaleDateString() %>
+                                                    </span> <i
+                                                        class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i>
+                                                </h6>
+                                            </div>
+                                            <div class="media-body">
+                                                <div>
+                                                    <%= latestOrders[4].status %>: -
+                                                    <%= latestOrders[4].totalPrice %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="content-main">
+                <div class="content-header">
+                    <div>
+                        <h2 class="content-title card-title">10 Best Selling Products </h2>
+                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>NO</th>
+                                                <th>Product Name</th>
+                                                <th>Quantity</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% if (bestSellingPro.length > 0) { %>
+                                                <% for (let i = 0; i < bestSellingPro.length; i++) { %>
+                                                    <tr>
+                                                        <td><%= i+1 %></td>
+                                                        <td><%= bestSellingPro[i].productName %></td>
+                                                        <td><%= bestSellingPro[i].totalQuantity %></td>
+                                                        
+                                                    </tr>
+                                                <% } %> 
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="3">No items found in Orders</td>
+                                                </tr>
+                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </section>
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Best Selling Category </h2>
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>NO</th>
+                                        <th>Category Name</th>
+                                        <th>Quantity</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (bestSellingCat.length > 0) { %>
+                                        <% for (let i = 0; i < bestSellingCat.length; i++) { %>
+                                            <tr>
+                                                <td><%= i+1 %></td>
+                                                <td><%= bestSellingCat[i].categoryName %></td>
+                                                <td><%= bestSellingCat[i].totalQuantity %></td>
+                                                
+                                            </tr>
+                                        <% } %> 
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="3">No items found in Orders</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</section>
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Best Selling Brand </h2>
+            
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>NO</th>
+                                    <th>Brand Name</th>
+                                    <th>Quantity</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (bestSellingBra.length > 0) { %>
+                                    <% for (let i = 0; i < bestSellingBra.length; i++) { %>
+                                        <tr>
+                                            <td><%= i+1 %></td>
+                                            <td><%= bestSellingBra[i]._id %></td>
+                                            <td><%= bestSellingBra[i].totalQuantity %></td>
+                                            
+                                        </tr>
+                                    <% } %> 
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="3">No items found in Orders</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+    <script>
+
+
+
+        new Chart("myChart1", {
+    type: "line",
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [
+            {
+                label: 'Products',
+                tension: 0.3,
+                fill: true,
+                backgroundColor: 'rgba(44, 120, 220, 0.2)',
+                borderColor: 'rgba(44, 120, 220)',
+                data: <%= JSON.stringify(productsPerMonth) %>
+            },
+            {
+                label: 'Sales',
+                tension: 0.3,
+                fill: true,
+                backgroundColor: 'rgba(4, 209, 130, 0.2)',
+                borderColor: 'rgb(4, 209, 130)',
+                data: <%= JSON.stringify(monthlySalesArray) %> // Use the array directly
+            }
+        ]
+    },
+    options: {
+        plugins: {
+            legend: {
+                labels: {
+                    usePointStyle: true,
+                },
+            }
+        }
+    }
+});
+
+    </script>
+
+<script>
+    const ctxs = document.getElementById('myChartCategory');
+    var catCount = JSON.parse('<%= JSON.stringify(categoryCount) %>')
+    var catName = JSON.parse('<%= JSON.stringify(categoryName) %>')
+    console.log(catName);
+    console.log(catCount);
+    new Chart(ctxs, {
+        type: 'doughnut',
+        data: {
+            labels: catName,
+            datasets: [{
+                label: 'Products',
+                data: catCount,
+                backgroundColor: [
+                    'rgb(147, 231, 203)',
+                    'wheat',
+                    'pink',
+                    'rgba(255, 195, 83, 0.947)',
+                    'red',
+                    'blue',
+                    'brown',
+                    'black',
+                    'yellow'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    display:false,
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)' // Reduced opacity for Y-axis grid lines
+                    },
+                },
+                x: {
+                    display:false,
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)' // Reduced opacity for Y-axis grid lines
+                    },
+                }
+            },
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                },
+            },
+            animation: {
+                duration: 2000, // 2 seconds animation
+            }
+        }
+    });
+</script>
+
+
+
+    <%- include('../layout/admin-footer.ejs' )%>

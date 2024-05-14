@@ -1,0 +1,1005 @@
+<%- include('../layout/header.ejs' )%>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+    </style>
+    <style>
+        .circle-image img {
+
+            border: 6px solid #fff;
+            border-radius: 100%;
+            padding: 0px;
+            top: -28px;
+            position: relative;
+            width: 70px;
+            height: 70px;
+            border-radius: 100%;
+            z-index: 1;
+            background: #e7d184;
+            cursor: pointer;
+
+        }
+
+
+        .dot {
+            height: 18px;
+            width: 18px;
+            background-color: burlywood;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+            border: 3px solid #fff;
+            top: -48px;
+            left: 186px;
+            z-index: 1000;
+        }
+
+        .name {
+            margin-top: -21px;
+            font-size: 18px;
+        }
+
+
+        .fw-500 {
+            font-weight: 500 !important;
+        }
+
+
+        .start {
+
+            color: green;
+        }
+
+        .stop {
+            color: red;
+        }
+
+
+        .rate {
+
+            border-bottom-right-radius: 12px;
+            border-bottom-left-radius: 12px;
+
+        }
+
+
+
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center
+        }
+
+        .rating>input {
+            display: none
+        }
+
+        .rating>label {
+            position: relative;
+            width: 1em;
+            font-size: 30px;
+            font-weight: 300;
+            color: #FFD600;
+            cursor: pointer
+        }
+
+        .rating>label::before {
+            content: "\2605";
+            position: absolute;
+            opacity: 0
+        }
+
+        .rating>label:hover:before,
+        .rating>label:hover~label:before {
+            opacity: 1 !important
+        }
+
+        .rating>input:checked~label:before {
+            opacity: 1
+        }
+
+        .rating:hover>input:checked~label:before {
+            opacity: 0.4
+        }
+
+
+        .buttons {
+            top: 36px;
+            position: relative;
+        }
+
+
+        .rating-submit {
+            border-radius: 15px;
+            color: #fff;
+            height: 49px;
+        }
+
+
+        .rating-submit:hover {
+
+            color: #fff;
+
+        }
+
+        .card {
+            position: relative;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 0.10rem
+        }
+
+        .card-header:first-child {
+            border-radius: calc(0.37rem - 1px) calc(0.37rem - 1px) 0 0
+        }
+
+        .card-header {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 0;
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+        }
+
+        .track {
+            position: relative;
+            background-color: #ddd;
+            height: 8px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            margin-bottom: 60px;
+            margin-top: 50px
+        }
+
+        .track .step {
+            -webkit-box-flex: 1;
+            -ms-flex-positive: 1;
+            flex-grow: 1;
+            width: 25%;
+            margin-top: -18px;
+            text-align: center;
+            position: relative
+        }
+
+        .track .step.active:before {
+            background: #187552
+        }
+
+        .track .step::before {
+            height: 7px;
+            position: absolute;
+            content: "";
+            width: 100%;
+            left: 0;
+            top: 18px
+        }
+
+        .track .step.active .icon {
+            background: #187552;
+            color: #fff
+        }
+
+        .track .icon {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            position: relative;
+            border-radius: 100%;
+            background: #ddd
+        }
+
+        .track .step.active .text {
+            font-weight: 400;
+            color: #000
+        }
+
+        .track .text {
+            display: block;
+            margin-top: 7px
+        }
+
+        .itemside {
+            position: relative;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            width: 100%
+        }
+
+        .itemside .aside {
+            position: relative;
+            -ms-flex-negative: 0;
+            flex-shrink: 0
+        }
+
+        .img-sm {
+            width: 80px;
+            height: 80px;
+            padding: 7px
+        }
+
+        ul.row,
+        ul.row-sm {
+            list-style: none;
+            padding: 0
+        }
+
+        .itemside .info {
+            padding-left: 15px;
+            padding-right: 7px
+        }
+
+        .itemside .title {
+            display: block;
+            margin-bottom: 5px;
+            color: #212529
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 1rem
+        }
+
+        .btn-warning {
+            color: #ffffff;
+            background-color: #3f894a;
+            border-color: #3f894a;
+            border-radius: 1px
+        }
+
+        .btn-warning:hover {
+            color: #ffffff;
+            background-color: #187552;
+            border-color: #187552;
+            border-radius: 1px
+        }
+    </style>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-lg-1">
+
+        </div>
+
+        <div class=" col-lg-11">
+            <section class="content-main">
+                <div class="content-header">
+                    <div>
+                        <h2 class="content-title card-title">Order detail</h2>
+                        <p>Details for Order ID: 3453012</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <header class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                                <span>
+                                    <i class="material-icons md-calendar_today"></i> <b></b>
+                                </span> <br>
+                                <small class="text-muted"></small>
+                            </div>
+                            <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+
+                                
+                                <% if (order.status=='pending' ) { %>
+                                    <button class="btn btn-fill-out btn-block" onclick="placeOrder('<%= order._id%>')">Continue Payment</button>
+                                    <!-- <a class="btn btn-primary" href="/api/pending-payment?id=<%= order._id%>">Continue Payment</a> -->
+                                    <a onclick="conformCansel('<%= order.product[0]._id %>','<%= order._id %>')"
+                                        class="btn btn-md rounded font-sm">Cancel</a>
+                                    <% } else if(order.status=='conformed' ){ %>
+                                      
+                                        <a onclick="conformCansel('<%= order.product[0]._id %>','<%= order._id %>')"
+                                            class="btn btn-md rounded font-sm">Cancel</a>
+
+
+                                        <% } else if(order.status=='canceled' ){ %>
+                                            <% } else if(order.status=='shipped' ){ %>
+                                               
+                                                <a onclick="conformCansel('<%= order.product[0]._id %>','<%= order._id %>')"
+                                                    class="btn btn-md rounded font-sm">Cancel</a>
+
+
+
+                                                <% } else if(order.status=='delivered' ){ %>
+                                                    <a class="btn btn-primary" href="/api/invoice?id=<%= order._id%>">invoice</a>
+                                                    <a onclick="conformReturn('<%= order.product[0]._id %>','<%= order._id %>')"
+                                                        class="btn btn-md rounded font-sm">Return</a>
+                                                    <% } else if(order.status=='returned' ){ %>
+
+                                                        <% } %>
+
+
+                            </div>
+                        </div>
+                    </header> <!-- card-header end// -->
+                    <div class="card-body">
+                        <br>
+                        <br>
+
+                        <br>
+                        <br>
+
+                        <% if (order.status=='delivered' ) { %>
+                            <div class="track col-lg-9">
+                                <div class="step active"> <span class="icon"> <i
+                                            class="fi-rs-shopping-bag mr-9"></i></span> <span class="text">
+                                        <h4>Order confirmed</h4>
+                                    </span> </div>
+                                <div class="step active"> <span class="icon"> <i class="fa fa-user"></i><i
+                                            class="fi-rs-marker mr-9"></i> </span> <span class="text">
+                                        <h4>Picked by courier</h4>
+                                    </span> </div>
+                                <div class="step active"> <span class="icon"> <i class="fa fa-truck"></i><i
+                                            class="fi-rs-shopping-cart-check mr-9"></i> </span> <span class="text">
+                                        <h4>On the way</h4>
+                                    </span> </div>
+                                <div class="step active"> <span class="icon"> <i class="fa fa-box"></i> <i
+                                            class="evara-font-home"></i></span> <span class="text">
+                                        <h4>Ready for pickup</h4>
+                                    </span> </div>
+                            </div>
+                            <% } else if(order.status=='canceled' ) { %>
+                                <div class="track col-lg-9">
+                                    <div class="step "> <span class="icon"> <i
+                                                class="fi-rs-shopping-bag mr-9"></i></span> <span class="text">
+                                            <h4>Order confirmed</h4>
+                                        </span> </div>
+                                    <div class="step "> <span class="icon"> <i class="fa fa-user"></i><i
+                                                class="fi-rs-marker mr-9"></i> </span> <span class="text">
+                                            <h4>Picked by courier</h4>
+                                        </span> </div>
+                                    <div class="step "> <span class="icon"> <i class="fa fa-truck"></i><i
+                                                class="fi-rs-shopping-cart-check mr-9"></i> </span> <span class="text">
+                                            <h4>On the way</h4>
+                                        </span> </div>
+                                    <div class="step "> <span class="icon"> <i class="fa fa-box"></i> <i
+                                                class="evara-font-home"></i></span> <span class="text">
+                                            <h4>Ready for pickup</h4>
+                                        </span> </div>
+                                </div>
+                                <% } else if(order.status==' returned' ) { %>
+                                    <div class="track col-lg-9">
+                                        <div class="step "> <span class="icon"> <i
+                                                    class="fi-rs-shopping-bag mr-9"></i></span> <span class="text">
+                                                <h4>Order confirmed</h4>
+                                            </span> </div>
+                                        <div class="step "> <span class="icon"> <i class="fa fa-user"></i><i
+                                                    class="fi-rs-marker mr-9"></i> </span> <span class="text">
+                                                <h4>Picked by courier</h4>
+                                            </span> </div>
+                                        <div class="step "> <span class="icon"> <i class="fa fa-truck"></i><i
+                                                    class="fi-rs-shopping-cart-check mr-9"></i> </span> <span
+                                                class="text">
+                                                <h4>On the way</h4>
+                                            </span> </div>
+                                        <div class="step "> <span class="icon"> <i class="fa fa-box"></i> <i
+                                                    class="evara-font-home"></i></span> <span class="text">
+                                                <h4>Ready for pickup</h4>
+                                            </span> </div>
+                                    </div>
+                                    <% } else if(order.status=='conformed' ) { %>
+                                        <div class="track col-lg-9">
+                                            <div class="step active"> <span class="icon"> <i
+                                                        class="fi-rs-shopping-bag mr-9"></i></span> <span class="text">
+                                                    <h4>Order confirmed</h4>
+                                                </span> </div>
+                                            <div class="step "> <span class="icon"> <i class="fa fa-user"></i><i
+                                                        class="fi-rs-marker mr-9"></i> </span> <span class="text">
+                                                    <h4>Picked by courier</h4>
+                                                </span> </div>
+                                            <div class="step "> <span class="icon"> <i class="fa fa-truck"></i><i
+                                                        class="fi-rs-shopping-cart-check mr-9"></i> </span> <span
+                                                    class="text">
+                                                    <h4>On the way</h4>
+                                                </span> </div>
+                                            <div class="step "> <span class="icon"> <i class="fa fa-box"></i> <i
+                                                        class="evara-font-home"></i></span> <span class="text">
+                                                    <h4>Ready for pickup</h4>
+                                                </span> </div>
+                                        </div>
+                                        <% } else if(order.status=='shipped' ) { %>
+                                            <div class="track col-lg-9">
+                                                <div class="step active"> <span class="icon"> <i
+                                                            class="fi-rs-shopping-bag mr-9"></i></span> <span
+                                                        class="text">
+                                                        <h4>Order confirmed</h4>
+                                                    </span> </div>
+                                                <div class="step active"> <span class="icon"> <i
+                                                            class="fa fa-user"></i><i class="fi-rs-marker mr-9"></i>
+                                                    </span> <span class="text">
+                                                        <h4>Picked by courier</h4>
+                                                    </span> </div>
+                                                <div class="step active"> <span class="icon"> <i
+                                                            class="fa fa-truck"></i><i
+                                                            class="fi-rs-shopping-cart-check mr-9"></i> </span> <span
+                                                        class="text">
+                                                        <h4>On the way</h4>
+                                                    </span> </div>
+                                                <div class="step "> <span class="icon"> <i class="fa fa-box"></i> <i
+                                                            class="evara-font-home"></i></span> <span class="text">
+                                                        <h4>Ready for pickup</h4>
+                                                    </span> </div>
+                                            </div>
+
+
+
+
+
+                                            <% } %>
+                                                <br>
+
+                                                <br>
+                                                <br>
+
+
+                                                <div class="row mb-50 mt-20 order-info-wrap">
+                                                    <div class="col-md-4">
+                                                        <article class="icontext align-items-start">
+                                                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                                                <i class="text-primary material-icons md-person"></i>
+                                                            </span>
+                                                            <div class="text">
+                                                                <h6 class="mb-1">Customer</h6>
+                                                                <p class="mb-1">
+                                                                    <%= user.username %> <br>
+                                                                        <%= user.email %><br> +1<%= user.mobile %>
+                                                                </p>
+                                                                <a href="/api/profile">View profile</a>
+                                                            </div>
+                                                        </article>
+                                                    </div> <!-- col// -->
+                                                    <div class="col-md-4">
+                                                        <article class="icontext align-items-start">
+                                                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                                                <i
+                                                                    class="text-primary material-icons md-local_shipping"></i>
+                                                            </span>
+                                                            <div class="text">
+                                                                <h6 class="mb-1">Order info</h6>
+                                                                <p class="mb-1">
+                                                                    Shipping:<%= order.address[0].adressType %> <br> Pay
+                                                                        method:<%= order.payment %> <br> Status: <%=
+                                                                                order.status %>
+                                                                </p>
+                                                                <a href="#">Download info</a>
+                                                            </div>
+                                                        </article>
+                                                    </div> <!-- col// -->
+                                                    <div class="col-md-4">
+                                                        <article class="icontext align-items-start">
+                                                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                                                <i class="text-primary material-icons md-place"></i>
+                                                            </span>
+                                                            <div class="text">
+                                                                <h6 class="mb-1">Deliver to</h6>
+                                                                <p class="mb-1">
+                                                                    City: <%= order.address[0].townCity %> <br>
+                                                                        <%= order.address[0].addressLine %> <br> Po Box
+                                                                            <%= order.address[0]. pinCode %> <br>
+                                                                                <a href="#">View profile</a>
+                                                            </div>
+                                                        </article>
+                                                    </div> <!-- col// -->
+                                                </div> <!-- row // -->
+                                                <div class="row">
+                                                    <div class="col-lg-7">
+                                                        <div class="table-responsive">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th width="40%">Product</th>
+                                                                        <th width="20%">Unit Price</th>
+                                                                        <th width="20%">Quantity</th>
+                                                                        <th width="20%" class="text-end">Total</th>
+                                                                        <% if (order.status=='delivered' ) { %>
+                                                                            <th width="30%" class="">Rate product </th>
+                                                                            <% } else { %>
+                                                                                <% } %>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+
+
+
+                                                                    
+                                                                    <% 
+                                                                    var totalSum = 0
+                                                                    for (let i=0; i < order.product.length;i++) { %>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <a class="itemside" href="#">
+                                                                                    <div class="left">
+
+                                                                                        <img src="/productimages/<%=order.product[i].image %>"
+                                                                                            width="40" height="40"
+                                                                                            class="img-xs" alt="Item">
+
+                                                                                    </div>
+                                                                                    <div class="info">
+                                                                                        <%= order.product[i].title %>
+                                                                                    </div>
+                                                                                </a>
+                                                                            </td>
+
+
+
+
+
+
+
+                                                                            <td>
+                                                                                <%= order.product[i].price %>
+                                                                            </td>
+                                                                            <td> x<%=order.product[i].quantity %>
+                                                                            </td>
+                                                                            <td>₹<%= order.product[i].price
+                                                                                    *order.product[i].quantity %>
+                                                                            </td>
+                                                                            <% var productValue=order.product[i].price*order.product[i].quantity;
+                                                                            totalSum += productValue; %>
+                                                                                <% if (order.status=='delivered' ) { %>
+                                                                                    <td>
+                                                                                        <a aria-label="Quick view"
+                                                                                            class="action-btn hover-up rate-button"
+                                                                                            data-bs-toggle="modal"
+                                                                                            data-bs-target="#quickViewModal"
+                                                                                            data-product-id="<%= order.product[i].ProductId %>">
+                                                                                            <button
+                                                                                                class="btn btn-sm">Rate</button>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                    
+                                                                                    <% } else { %>
+                                                                                        <% } %>
+                                                                        </tr>
+
+
+
+                                                                        <% } %>
+
+
+
+
+                                                                            <tr>
+                                                                                <td colspan="4">
+                                                                                    <article class="float-end">
+                                                                                        <dl class="dlist">
+                                                                                            <dt>Subtotal:</dt>
+                                                                                            <dd>₹<%= totalSum %>
+                                                                                            </dd>
+                                                                                        </dl>
+                                                                                        <dl class="dlist">
+                                                                                            <dt> shipping charge:</dt>
+                                                                                            <dd>₹<%=
+                                                                                                (order.totalPrice).toFixed(2)-(totalSum).toFixed(2)
+                                                                                                %>
+                                                                                            </dd>
+                                                                                        </dl>
+                                                                                        <dl class="dlist">
+                                                                                            <dt>Grand total:</dt>
+                                                                                            <dd> <b class="h5">₹<%=
+                                                                                                        (order.totalPrice).toFixed(2)
+                                                                                                        %></b> </dd>
+                                                                                        </dl>
+                                                                                        <dl class="dlist">
+                                                                                            <dt class="text-muted">
+                                                                                                Status: </dt>
+                                                                                            <dd>
+                                                                                                <span
+                                                                                                    class="badge rounded-pill alert-success text-success">
+                                                                                                    <%= order.status %>
+                                                                                                </span>
+                                                                                            </dd>
+                                                                                        </dl>
+                                                                                    </article>
+                                                                                </td>
+                                                                            </tr>
+                                                                </tbody>
+                                                            </table>
+
+                                                            <!--------------------------------- modal for rarting ---------------------- -->
+
+                                                            <div class="modal fade custom-modal" id="quickViewModal"
+                                                                tabindex="-1" aria-labelledby="quickViewModalLabel"
+                                                                aria-hidden="true">
+
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+                                                                        <div class="modal-body">
+                                                                            <div class="row">
+                                                                                <div class="comment-form">
+                                                                                    <h4 class="mb-15">Add a review</h4>
+
+
+
+                                                                                    <div
+                                                                                        class="container d-flex justify-content-center mt-5">
+
+                                                                                        <div class="card text-center mb-5">
+
+                                                                                            <div>
+                                                                                                <img style="width: 100px; height: 100px;"
+                                                                                                src="/imgs/theme/profilephoto.jpg"
+                                                                                                class="center-xy img-fluid"
+                                                                                                alt="Logo ">
+
+
+                                                                                            </div>
+                                                                                          
+
+
+
+                                                                                            <div style="margin-top: 10px;"
+                                                                                                class="name mb-1 fw-500">
+                                                                                                <%= user.username%>
+                                                                                            </div>
+
+
+
+                                                                                            <form action="/api/review"
+                                                                                                method="post">
+                                                                                                <div
+                                                                                                    class="location mt-4">
+                                                                                                    <div
+                                                                                                        class="form-group">
+                                                                                                        <textarea
+                                                                                                            class="form-control w-100"
+                                                                                                            name="comment"
+                                                                                                            id="comment"
+                                                                                                            cols="30"
+                                                                                                            rows="9"
+                                                                                                            placeholder="Write Comment"></textarea>
+                                                                                                    </div>
+
+
+
+                                                                                                </div>
+
+
+                                                                                                <div
+                                                                                                    class="rate bg-success py-3 text-white mt-3">
+
+                                                                                                    <h6 class="mb-0">
+                                                                                                        Rate your driver
+                                                                                                    </h6>
+
+                                                                                                    <div class="rating">
+                                                                                                        <input
+                                                                                                            type="radio"
+                                                                                                            name="rating"
+                                                                                                            value="5"
+                                                                                                            id="5"><label
+                                                                                                            for="5">☆</label>
+                                                                                                        <input
+                                                                                                            type="radio"
+                                                                                                            name="rating"
+                                                                                                            value="4"
+                                                                                                            id="4"><label
+                                                                                                            for="4">☆</label>
+                                                                                                        <input
+                                                                                                            type="radio"
+                                                                                                            name="rating"
+                                                                                                            value="3"
+                                                                                                            id="3"><label
+                                                                                                            for="3">☆</label>
+                                                                                                        <input
+                                                                                                            type="radio"
+                                                                                                            name="rating"
+                                                                                                            value="2"
+                                                                                                            id="2"><label
+                                                                                                            for="2">☆</label>
+                                                                                                        <input
+                                                                                                            type="radio"
+                                                                                                            name="rating"
+                                                                                                            value="1"
+                                                                                                            id="1"><label
+                                                                                                            for="1">☆</label>
+                                                                                                    </div>
+
+
+                                                                                                    <div
+                                                                                                        class="buttons px-4 mt-0">
+                                                                                                        <input
+                                                                                                            type="hidden"
+                                                                                                            id="product-id-hidden"
+                                                                                                            name="productId"
+                                                                                                            value="">
+                                                                                                        <input
+                                                                                                            type="hidden"
+                                                                                                            id=""
+                                                                                                            name="orderId"
+                                                                                                            value="<%=order._id %>">
+
+                                                                                                        <button
+                                                                                                            type="submit"
+                                                                                                            class="btn btn-warning btn-block rating-submit">Submit</button>
+                                                                                                    </div>
+                                                                                            </form>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <script>
+                                                                    document.addEventListener("DOMContentLoaded", function () {
+                                                                        const rateButtons = document.querySelectorAll(".rate-button");
+                                                                        const productIdHidden = document.getElementById("product-id-hidden");
+
+                                                                        rateButtons.forEach(function (button) {
+                                                                            button.addEventListener("click", function () {
+                                                                                const productId = button.getAttribute("data-product-id");
+                                                                                productIdHidden.value = productId;
+
+                                                                            });
+                                                                        });
+                                                                    });
+                                                                </script>
+
+
+                                                                <!--------------------------------- modal for rarting ---------------------- -->
+
+
+
+
+
+
+
+                                                            </div> <!-- table-responsive// -->
+                                                            <a class="btn btn-primary" href="/api/allOderData">View
+                                                                Orders</a>
+                                                            <a class="btn btn-primary" href="/api/user/">Continue
+                                                                Shoping</a>
+
+                                                        </div> <!-- col// -->
+                                                        <div class="col-lg-1"></div>
+                                                        <div class="col-lg-4">
+                                                            <div class="box shadow-sm bg-light">
+                                                                <h6 class="mb-15">Payment info</h6>
+                                                                <p>
+
+                                                                    Business name: Grand Market LLC <br>
+                                                                    Phone: +1 (800) 555-154-52
+                                                                </p>
+                                                            </div>
+
+
+
+
+                                                        </div> <!-- col// -->
+
+                                                    </div>
+
+                                                </div> <!-- card-body end// -->
+
+                    </div> <!-- card end// -->
+            </section> <!-- content-main end// -->
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+        function addRating(product) {
+            alert(product)
+
+        }
+
+    </script>
+    <script>
+        function conformReturn(id, orderId) {
+            swal({
+                title: "Are you sure?",
+                text: "Once Return, you will not be able to recover this Product!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        swal("Poof! Your imaginary file has been deleted!", {
+                            icon: "success",
+                        });
+                        location.href = `/api/return?id=${id}&orderId=${orderId}`
+                    } else {
+                        Swal.fire({
+                            title: "Return Cansell Success",
+
+                            icon: "error",
+                            timer: 1000,
+                            showConfirmButton: false, // This removes the button
+                        });
+                    }
+                });
+
+        }
+    </script>
+
+
+    <script>
+        function conformCansel(id, orderId) {
+            swal({
+                title: "Are you sure?",
+                text: "Once Cansel, you will not be able to recover this Product!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        swal("Poof! Your imaginary file has been deleted!", {
+                            icon: "success",
+                        });
+                        location.href = `/api/canselOrder?id=${id}&orderId=${orderId}`
+                    } else {
+                        Swal.fire({
+                            title: "Cansel Success",
+
+                            icon: "error",
+                            timer: 1000,
+                            showConfirmButton: false, // This removes the button
+                        });
+                    }
+                });
+
+        }
+
+
+
+    </script>
+      <script>
+
+
+
+
+
+
+        async function placeOrder(orderId) {
+            //-=-==-==--=-=--==-=-=-=--===--=-=-=-=-=-=-=-=-=-=-=-=-=
+        
+
+           
+                $.ajax({
+                    url: '/api/pending-payment',
+                    method: 'POST',
+                    data: {
+                        orderId:orderId
+
+                    },
+                    async: true,
+                    success: function (response) {
+                         if (response.method == 'online') {
+                            
+                            // Replace with your Razorpay API key
+                            var razorpayApiKey = 'rzp_test_d4KrolXkkWXwvg';
+
+                            // Calculate the amount dynamically based on the total order amount (in paise)
+                            var orderAmount = Math.round(response.numericValue * 100);
+
+                            // Define the Razorpay options
+                            var options = {
+                                "key": razorpayApiKey,
+                                "amount": orderAmount, // Dynamically calculated amount
+                                "currency": "INR",
+                                "name": "THREADS",
+                                "description": "Order Payment",
+                                "order_id": response.razorpayOrder.id, // Replace with actual order ID
+                                "handler": function (response) {
+                                    verifyPayment(response);
+                                },
+                                "prefill": {
+                                    "name": "Customer Name", // Set to the customer's name
+                                    "email": "customer@example.com", // Set to the customer's email
+                                    "contact": "9000090000" // Set to the customer's contact number
+                                },
+                                "callback_url": "/your-server-callback-url", // Replace with your server's callback URL
+                                "theme": {
+                                    "color": "#273631"
+                                }
+                            };
+                            // Create a new Razorpay instance and open the payment dialog
+                            try {
+                              var rzp1 = new Razorpay(options);
+                              rzp1.open();
+                            } catch (error) {
+                              console.error('Error initiating Razorpay payment:', error);
+                            }      
+                        } 
+                        else {
+                            Swal.fire({
+                                title: 'Error Occured',
+                                text: "Can't process order error occured",
+                                icon: 'fail',
+                                timer: 5000
+                            })
+
+                        }
+                    }
+                })
+                function verifyPayment(response) {
+                    $.ajax({
+                        url: '/api/verifyPayment',
+                        method: 'post',
+                        data: {
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature
+                        },
+                        success: (response) => {
+
+                            if (response.status) {
+
+                                Swal.fire({
+                                    title: "Order success",
+                                    text: "order placed successfully",
+                                    icon: "success",
+                                    showConfirmButton: false,
+                                    timer: 2000,
+
+                                })
+                                location.href = '/api/allOderData'
+
+
+                            } else {
+                                alert("Payment failed!" + response.errMsg)
+                            }
+                        }
+                    })
+                }
+
+
+
+
+                if (response.status) {
+                    Swal.fire({
+                        title: 'ODER PLACED ',
+                        text: 'Oder placed successfull !!',
+                        icon: 'success',
+                        timer: 2000
+                    })
+                }
+                const id = response.oderId
+                const qtyes = response.qty
+                const url = `/api/deleteCart?id=${id}&qtyes=${qtyes}`;
+                // Redirect to the constructed URL
+                window.location.href = url
+
+
+
+
+
+
+
+
+     }
+
+        
+
+
+
+    </script>
+
+    <%- include('../layout/footer.ejs' )%>

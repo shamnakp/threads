@@ -1,0 +1,367 @@
+
+<%- include('../layout/admin-header.ejs' )%>
+
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Edit Product</h2>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Basic</h4>
+                        </div>
+                        <div class="card-body">
+                            <% if (typeof message !== 'undefined') { %>
+                                <div class="alert alert-danger text-center">
+                                    <p><%= message %></p>
+                                </div>
+                            <% } %>
+                            <script>
+                                // Set a timeout to hide the success message after 5 seconds
+                                setTimeout(function() {
+                                    var successAlert = document.querySelector('.alert-danger');
+                                    if (successAlert) {
+                                        successAlert.style.display = 'none';
+                                    }
+                                }, 5000); // 5000 milliseconds = 5 seconds
+                            </script>
+                            <form method="post" onsubmit="return editProductValidate()" action="/api/admin/productEdited"
+                                enctype="multipart/form-data">
+                                <div class="mb-4">
+                                    <label for="productName" class="form-label">Product Name</label>
+                                    <input name="productName" value="<%- product.title %>" type="text"
+                                        placeholder="Type here" class="form-control" id="productName">
+                                    <p style="color: red;" id="productNameError"></p>
+
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Discription</label>
+                                    
+                                    <textarea id="description" name="description" placeholder="Type here"
+                                        class="form-control" rows="4"><%- product.discription %></textarea>
+                                    <p style="color: red;" id="descriptionError"></p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <div class="mb-4">
+                                            <label class="form-label">Regular price</label>
+                                            <div class="row gx-2">
+                                                <input id="regularPrice" name="regularPrice"
+                                                    value="<%- product.regularPrice %>" placeholder="&#8377"
+                                                    type="text" class="form-control">
+                                                <p style="color: red;" id="regularPriceError"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="mb-4">
+                                            <label class="form-label">Selling price</label>
+                                            <input id="salePrice" name="salePrice" value="<%- product.price %>"
+                                                placeholder="&#8377" type="text" class="form-control">
+                                            <p style="color: red;" id="salePriceError"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="mb-4">
+                                            <label class="form-label">Stock</label>
+                                            <input name="quantity" id="stock" value="<%- product.quantity %>" type="text"
+                                                class="form-control">
+                                            <p style="color: red;" id="stockError"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label class="form-label">Category</label>
+                                        
+                                        <select name="categoryId" class="form-select">
+                                            <option value="<%- product.category._id %>"><%-
+                                                    product.category.name %>
+                                            </option>
+                                            <% categories.forEach(category=>{ %>
+                                                <option value="<%- category._id %>"><%- category.name %>
+                                                </option>
+                                                <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <h4>Image</h4>
+                                        </div>
+                                            
+                                    <div class="row">
+                                        <div class="card-body align-items-center mb-5" style="margin-bottom: 20px;">
+                                              <img src="assets/imgs/theme/upload.svg" alt="" id="imgView1">
+                                              <input class="form-control" type="file" name="images" id="input1"
+                                                  accept="image/png, image/jpeg, image/jpg"
+                                                  onchange="viewImage1(event), viewImage(event, 1)">
+                                          </div>
+                                          <div class="image-cropper d-flex align-items-center mb-5"
+                                              style="display:none; width: 300px; height: 200px; margin-bottom: 20px;">
+                                              <img src="" id="croppedImg1" alt="">
+                                              <button type="button" id="saveButton1" class="btn-sm btn-primary">Save</button>
+                                          </div>
+                                      </div>
+                                      
+                                      <div class="row">
+                                          <div class="card-body align-items-center" style="margin-bottom: 20px;">
+                                              <img src="assets/imgs/theme/upload.svg" alt="" id="imgView2">
+                                              <input class="form-control" type="file" name="images" id="input2"
+                                                  accept="image/png, image/jpeg, image/jpg"
+                                                  onchange="viewImage2(event),viewImage(event, 2)">
+                                          </div>
+                                          <div class="image-cropper d-flex align-items-center"
+                                              style="display:none; width: 300px; height: 200px; margin-bottom: 20px;">
+                                              <img src="" id="croppedImg2" alt="">
+                                              <button type="button" id="saveButton2" class="btn-sm btn-primary">Save</button>
+                                          </div>
+                                      </div>
+                                        </div>
+                                    </div> <!-- card end// -->
+                                </div>
+                                <input type="text" hidden name="id" value="<%- product._id %>">
+                                <div class="row">
+                                    <% for( let i=0; i < product.images.length; i++ ) { %>
+                                        <div class="col-lg-3">
+                                            <div class="card mb-4">
+                                                <div class="card-header" style="height: 200px;">
+                                                    <img style=" object-fit: contain; height: 100%; width: 100%;"
+                                                        src="/productimages/<%- product.images[i] %>" alt="image">
+                                                </div>
+                                                <div class="card-body bg-light d-flex align-items-center justify-content-center"
+                                                    style="height: 50px;">
+                                                     <a href="/api/admin/deleteSingleImage?img=<%= product.images[i] %>&id=<%=product._id %>"><span class="btn btn-outline-danger">Delete</span></a>
+                                                     <!-- btn btn-outline-danger imageRemoveBtn -->
+                                                     <!-- badge rounded-pill alert-danger -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% } %>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Edit Product</button>
+                                </div>
+                            </form>
+                        </div> 
+                    </div>
+                    <!-- card end// -->
+                </div>
+
+            </div>
+        </section> <!-- content-main end// -->
+    </main>
+
+    <!-- Image remove from product -->
+    <script>
+        const imageRemoveBtn = document.querySelectorAll('.imageRemoveBtn');
+        imageRemoveBtn.forEach((btn) => {
+            btn.addEventListener('click', async (event) => {
+                event.preventDefault()
+
+                const imageFile = event.currentTarget.getAttribute('data-imageFile');
+                // console.log(imageFile)
+                const productId = event.currentTarget.getAttribute('data-productId')
+                // console.log(productId)
+
+                if (imageFile && productId) {
+                    const data = {
+                        imageFile: imageFile,
+                        productId: productId
+                    }
+                    const response = await Swal.fire({
+                        title: "Remove",
+                        text: "Are you to Remove Image",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#990f0f',
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'No !'
+                    });
+
+                    if (response.isConfirmed) {
+                        const response = await fetch('/admin/remove-image', {
+                            method: 'post',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        // Waiting for the result
+                        const result = await response.json();
+
+                        if (result.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: result.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            setTimeout(() => {
+                                location.href = location.href
+                            }, 2000);
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: result.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
+                    }
+
+
+
+                }
+            })
+        })
+    </script>
+    <script>
+        
+
+
+        function viewImage1(event) {
+            document.getElementById('imgView1').src = URL.createObjectURL(event.target.files[0])
+        }
+
+        function viewImage2(event) {
+            document.getElementById('imgView2').src = URL.createObjectURL(event.target.files[0])
+        }
+
+        function viewImage3(event) {
+            document.getElementById('imgView3').src = URL.createObjectURL(event.target.files[0])
+        }
+
+
+        function viewImage(event, index) {
+            let input = event.target;
+            let reader = new FileReader();
+
+            reader.onload = function () {
+                let dataURL = reader.result;
+                let image = document.getElementById('imgView' + index);
+                image.src = dataURL;
+
+                // Initialize Cropper.js on the image
+                let cropper = new Cropper(image, {
+                    aspectRatio:  4 / 3, // Square aspect ratio
+                    viewMode: 1,
+                    guides: true,
+                    background: false,
+                    autoCropArea: 1,
+                    zoomable: true,
+                    width: 1200, // Set the desired width
+                    height: 900, // Set the desired height
+                });
+
+
+                // Show the image cropper container
+                let cropperContainer = document.querySelector('#croppedImg' + index).parentNode;
+                cropperContainer.style.display = 'block';
+
+                // Update the cropped image when the "Save" button is clicked
+                let saveButton = document.querySelector('#saveButton' + index);
+                saveButton.addEventListener('click', async function () {
+                    let croppedCanvas = cropper.getCroppedCanvas();
+                    //  width: 500, // Specify the desired width here
+                    //  height: 600,
+                    // });
+
+                    let croppedImage = document.getElementById("croppedImg" + index);
+                    croppedImage.src = croppedCanvas.toDataURL('image/jpeg', 1.0);
+
+                    // Generate a unique name for the cropped image file based on the current timestamp
+                    let timestamp = new Date().getTime();
+                    let fileName = `cropped-img-${timestamp}-${index}.png`;
+
+                    await croppedCanvas.toBlob(blob => {
+                        let input = document.getElementById('input' + index);
+                        let imgFile = new File([blob], fileName, blob)
+                        const fileList = new DataTransfer();
+                        fileList.items.add(imgFile);
+                        input.files = fileList.files
+                    });
+                    // cropperContainer.style.display = 'none';
+                });
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+
+
+
+
+
+        // Array to store selected images
+        const selectedImages = [];
+
+        // Function to handle file input change
+        document.getElementById("imageInput").addEventListener("change", handleFileSelect);
+
+        function handleFileSelect(event) {
+            // Target the container for displaying thumbnails
+            const addedImagesContainer = document.getElementById("addedImagesContainer");
+
+            // Clear previous content
+            addedImagesContainer.innerHTML = "";
+
+            const files = event.target.files;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                // Add the file to the selected images array
+                selectedImages.push(file);
+
+                // Create thumbnail element
+                const thumbnail = document.createElement("div");
+                thumbnail.classList.add("thumbnail");
+
+                // Create image element
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(file);
+                img.alt = "thumbnail";
+
+                // Set a fixed width for the image
+                img.style.width = "50px"; // Adjust the width as needed
+                img.style.height = "auto";
+
+                // Create remove icon
+                const removeIcon = document.createElement("span");
+                removeIcon.classList.add("remove-icon");
+                removeIcon.innerHTML = "&times;"; // Multiplication symbol as a cross
+
+                // Event listener to remove the image on icon click
+                removeIcon.addEventListener("click", function () {
+                    // Remove the file from the selected images array
+                    const index = selectedImages.indexOf(file);
+                    if (index !== -1) {
+                        selectedImages.splice(index, 1);
+                    }
+
+                    // Remove the thumbnail from the container
+                    thumbnail.remove();
+                });
+
+                // Append elements to thumbnail
+                thumbnail.appendChild(img);
+                thumbnail.appendChild(removeIcon);
+
+                // Append thumbnail to the container
+                addedImagesContainer.appendChild(thumbnail);
+            }
+        }
+
+    </script>
+    
+   <%- include('../layout/admin-footer.ejs' )%>

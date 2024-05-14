@@ -1,0 +1,571 @@
+<%- include('../layout/header.ejs') %>
+
+    <script src="https://unpkg.com/js-image-zoom/js-image-zoom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-image-zoom/js-image-zoom.min.js"></script>
+
+    <!-- this is for zoom -->
+    <style>
+        /* Keep your existing CSS styles */
+        .img_zoom_container {
+            position: relative;
+            overflow: hidden;
+            cursor: zoom-in;
+        }
+
+        .img_zoom {
+            transition: transform 0.9s ease-in-out;
+            transform-origin: center center;
+        }
+
+        /* Remove the background-image style from figure.zoom */
+        figure.zoom {
+            background-position: 50% 50%;
+            position: relative;
+            margin: 10px auto;
+            border: 5px solid white;
+            box-shadow: -1px 5px 15px black;
+            height: 500px;
+            width: 500px;
+            overflow: hidden;
+            cursor: zoom-in;
+        }
+
+        /* Add a rule to hide the img inside the figure */
+        figure.zoom img {
+            display: none;
+        }
+
+        .img_zoom_container {
+            position: relative;
+            overflow: hidden;
+            cursor: zoom-in;
+        }
+
+        .img_zoom {
+            transition: transform 0.9s ease-in-out;
+            transform-origin: center center;
+        }
+    </style>
+
+    <!-- zoom style end  -->
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/api" rel="nofollow">Home</a>
+                    <span></span>
+                    <a href="/api/shop" rel="nofollow">shop</a>
+                    <span></span> Details
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <br><br>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="product-detail accordion-detail">
+                            <div class="row mb-50">
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <div class="detail-gallery">
+                                        <span class="zoom-icon" id="zoom-icon"><i class="fi-rs-search"></i></span>
+                                        <!-- MAIN SLIDES -->
+                                        <div class="product-image-slider">
+                                            <% for (let i=0; i < product.images.length; i++) { %>
+                                                <figure class="border-radius-10">
+
+                                                    <img style="width: 475px; height: 800px;"
+                                                        src="/productimages/<%= product.images[i] %>"
+                                                        alt="product image">
+
+
+
+                                                </figure>
+                                                <% } %>
+                                        </div>
+                                        <!-- THUMBNAILS -->
+                                        <div class="slider-nav-thumbnails pl-15 pr-15">
+                                            <% for (let i=0; i < product.images.length; i++) { %>
+
+                                                <div>
+                                                    <img style="height: 150 px; width: 100px;"
+                                                        src="/productimages/<%= product.images[i] %>"
+                                                        alt="product image">
+
+
+                                                </div>
+                                                <% } %>
+                                        </div>
+                                    </div>
+                                    <!-- End Gallery -->
+                                    <div class="social-icons single-share">
+                                        <ul class="text-grey-5 d-inline-block">
+                                            <li><strong class="mr-10">Share this:</strong></li>
+                                            <li class="social-facebook"><a href="#"><img src="#" alt=""></a></li>
+                                            <li class="social-twitter"> <a href="#"><img src="#" alt=""></a></li>
+                                            <li class="social-instagram"><a href="#"><img src="#" alt=""></a>
+                                            </li>
+                                            <li class="social-linkedin"><a href="#"><img src="#" alt=""></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <div class="detail-info">
+                                        <h2 class="title-detail">
+                                            <%= product.title %>
+                                        </h2>
+                                        <div class="product-detail-rating">
+                                            <div class="pro-details-brand">
+                                                <span>Brand <a href="#">: <%= product.brand %>
+                                                    </a></span>
+                                            </div>
+                                            <div class="product-rate-cover text-end">
+                                                <div class="product-rate d-inline-block">
+                                                    <div class="product-rating"
+                                                        style="width: <%= product.rating.average *20  %>% "></div>
+                                                </div>
+                                            </div>
+                                            <span class="font-small ml-5 text-muted"> (<%= product.rating.totalRatings
+                                                    %> reviews)</span>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix product-price-cover">
+                                        <div class="product-price primary-color float-left">
+                                            <h4><span class="text-brand ">₹<%= product.price %></span></h4>
+                                            <span class="old-price"> ₹<%= Math.round(product.regularPrice) %></span>
+                                            <span class="save-price  font-md color3 ml-15"></span>
+                                        </div>
+                                    </div>
+                                    <div class="bt-1 border-color-1 mt-15 mb-15"></div>
+                                    <div class="short-desc mb-30">
+                                        <p>
+                                            <%= product.discription %>
+                                        </p>
+                                    </div>
+                                    <div class="product_sort_info font-xs mb-30">
+                                        <ul>
+                                            <li class="mb-10"><i class="fi-rs-crown mr-5"></i> 1 Year <%= product.brand
+                                                    %>
+                                                    Brand Warranty</li>
+                                            <li class="mb-10"><i class="fi-rs-refresh mr-5"></i> 30 Day Return
+                                                Policy</li>
+                                            <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="attr-detail attr-color mb-15">
+                                        <strong class="mr-10">Color</strong>
+                                        <ul class="list-filter color-filter">
+                                            <li class="active"> <a href="#">
+                                                    <%= product.color%>
+                                                </a>
+                                        </ul>
+                                    </div>
+                                    <div class="attr-detail attr-size">
+                                        <strong class="mr-10">Size</strong>
+                                        <ul class="list-filter size-filter font-small">
+                                            <li class="active"> <a href="#">
+                                                    <%= product.size %>
+                                                </a>
+                                        </ul>
+                                    </div>
+                                    <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                    <div class="detail-extralink">
+
+                                        <div class="product-extra-link2">
+
+
+
+                                            <br>
+                                            <a aria-label="Add To Wishlist" onclick="wishList('<%= product._id %>')"
+                                                class="action-btn hover-up"><i class="fi-rs-heart"></i></a>
+
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <div class=" ml-5"><a onclick="addToCart('<%= product.id %>')"><button
+                                                    type="submit" class="button button-add-to-cart ">Add
+                                                    tocart</button></a></div>
+                                        <div class="col-lg-3"><a href="/api/buyNOw?id=<%= product.id %>"><button
+                                                    style="width: 100px; height: 40px;" type="submit"
+                                                    class="btn btn-sm button-add-to-cart">Buy Now</button></a></div>
+                                    </div>
+                                    <ul class="product-meta font-xs color-grey mt-50">
+                                        <li>Availability:<span class="in-stock text-success ml-5">
+                                                <%= product.quantity %> in Stock
+                                            </span></li>
+                                    </ul>
+                                </div>
+                                <!-- Detail Info -->
+                            </div>
+                        </div>
+                        <div class="tab-style3">
+                            <ul class="nav nav-tabs text-uppercase">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="Description-tab" data-bs-toggle="tab"
+                                        href="#Description">Description</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">Reviews (
+                                        <%= product.rating.totalRatings%>)
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content shop_info_tab entry-main-content">
+                                <div class="tab-pane fade show active" id="Description">
+                                    <div class="">
+                                        <p>
+                                            <%= product.discription %>
+                                        </p>
+                                        <ul class="product-more-infor mt-30">
+                                            <li><span>Type Of Packing</span> Box </li>
+                                            <li><span>Color</span>
+                                                <%= product.color %>
+                                            </li>
+                                            <li><span>Available Quantity</span>
+                                                <%= product.quantity %>
+                                            </li>
+
+                                        </ul>
+                                        <hr class="wp-block-separator is-style-dots">
+
+                                        <h4 class="mt-30">Packaging & Delivery</h4>
+                                        <hr class="wp-block-separator is-style-wide">
+                                        <p>Cyclo's packaging and delivery solutions are a testament to our commitment to
+                                            excellence. Our quality-driven approach ensures that your products are
+                                            protected and delivered with care. From elegant packaging that enhances the
+                                            unboxing experience to export-ready solutions that meet global standards, we
+                                            take pride in providing the best. Trust Cyclo for quality, protection, and
+                                            peace of mind with every delivery.
+                                        </p>
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="Reviews">
+                                    <!--Comments-->
+                                    <div class="comments-area">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <h4 class="mb-30">Customer questions & answers</h4>
+                                                <div class="comment-list">
+                                                    <% product.individualRatings.forEach(rating=> { %>
+                                                        <div class="single-comment justify-content-between d-flex">
+                                                            <div class="user justify-content-between d-flex">
+                                                                <div class="thumb text-center">
+                                                                    <img src="/imgs/theme/profilephoto.jpg"
+                                                                        alt="<%= rating.postedBy.username %>">
+
+                                                                    <h6><a href="#">
+                                                                            <%= rating.postedBy.username %>
+                                                                        </a></h6>
+                                                                    <p class="font-xxs">Since <%= rating.postedBy.since
+                                                                            %>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="desc">
+                                                                    <h6>
+                                                                        <%= rating.star %> out of 5
+                                                                    </h6>
+                                                                    <div class="product-rate d-inline-block">
+
+                                                                        <div class="product-rating"
+                                                                            style="width: <%= rating.star * 20 %>%">
+                                                                        </div>
+                                                                    </div>
+                                                                    <p>
+                                                                        <%= rating.review %>
+                                                                    </p>
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <div class="d-flex align-items-center">
+
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <% }); %>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <h4 class="mb-30">Customer reviews</h4>
+
+                                                <% if (product.individualRatings && product.individualRatings.length> 0)
+                                                    { %>
+                                                    <% let totalStars=0; %>
+                                                        <% let totalRatings=0; %>
+                                                            <% let ratingCounts={ 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }; %>
+
+                                                                <% product.individualRatings.forEach(rating=> { %>
+                                                                    <% totalStars +=rating.star; %>
+                                                                        <% totalRatings +=1; %>
+                                                                            <% ratingCounts[rating.star] +=1; %>
+                                                                                <% }); %>
+
+                                                                                    <% let averageRating=totalStars /
+                                                                                        totalRatings; %>
+                                                                                        <% averageRating=averageRating.toFixed(1);
+                                                                                            %>
+
+                                                                                            <div class="d-flex mb-30">
+                                                                                                <div
+                                                                                                    class="product-rate d-inline-block mr-15">
+                                                                                                    <div class="product-rating"
+                                                                                                        style="width: <%= averageRating * 20 %>%">
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <h6>
+                                                                                                    <%= averageRating %>
+                                                                                                        out of 5
+                                                                                                </h6>
+                                                                                            </div>
+
+                                                                                            <% for (let i=5; i>= 1; i--)
+                                                                                                { %>
+                                                                                                <% let
+                                                                                                    percentage=(ratingCounts[i]
+                                                                                                    / totalRatings) *
+                                                                                                    100; %>
+                                                                                                    <div
+                                                                                                        class="progress">
+                                                                                                        <span>
+                                                                                                            <%= i %>
+                                                                                                                star
+                                                                                                        </span>
+                                                                                                        <div class="progress-bar"
+                                                                                                            role="progressbar"
+                                                                                                            style="width: <%= percentage.toFixed(1) %>%;"
+                                                                                                            aria-valuenow="<%= percentage.toFixed(1) %>"
+                                                                                                            aria-valuemin="0"
+                                                                                                            aria-valuemax="100">
+                                                                                                            <%= percentage.toFixed(1)
+                                                                                                                %>%
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <% } %>
+
+                                                                                                        <% } else { %>
+                                                                                                            <!-- Handle case where there are no ratings -->
+                                                                                                            <p>No
+                                                                                                                ratings
+                                                                                                                available.
+                                                                                                            </p>
+                                                                                                            <% } %>
+
+                                                                                                                <a href="#"
+                                                                                                                    class="font-xs text-muted">How
+                                                                                                                    are
+                                                                                                                    ratings
+                                                                                                                    calculated?</a>
+                                            </div>
+
+                                            <!--comment form-->
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-60">
+                                    <div class="col-12">
+                                        <h3 class="section-title style-1 mb-30">Related products</h3>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="row related-products">
+
+                                            <% if (relatedPr.length> 0) { %>
+
+
+                                                <% for (let i=0; i < relatedPr.length;i++) { %>
+                                                    <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                                        <div class="product-cart-wrap small hover-up">
+                                                            <div class="product-img-action-wrap">
+                                                                <div class="product-img product-img-zoom">
+                                                                    <a href="/api/aProduct?id=<%= relatedPr[i].id %>"
+                                                                        tabindex="0">
+                                                                        <img class="default-img"
+                                                                            src="/productimages/<%= relatedPr[i].images[0] %>"
+                                                                            alt="">
+                                                                        <img class="hover-img"
+                                                                            src="/productimages/<%= relatedPr[i].images[1] %>"
+                                                                            alt="">
+                                                                    </a>
+                                                                </div>
+                                                                <div class="product-action-1">
+
+                                                                    <a aria-label="Add To Wishlist"
+                                                                        class="action-btn hover-up"
+                                                                        onclick="wishList('<%= relatedPr[i]._id %>')"><i
+                                                                            class="fi-rs-heart"></i></a>
+
+                                                                </div>
+                                                                <div
+                                                                    class="product-badges product-badges-position product-badges-mrg">
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-content-wrap">
+                                                                <h2><a href="#" tabindex="0">
+                                                                        <%= relatedPr[i].title %>
+
+                                                                    </a></h2>
+                                                                <br>
+                                                                <br>
+
+                                                                <div class="product-price">
+                                                                    <span>₹<%= relatedPr[i].price %></span>
+                                                                    <span class="old-price">₹<%=
+                                                                            Math.round(relatedPr[i].regularPrice) %>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <% } %>
+
+
+
+
+
+
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td colspan="2">No Silmilar Products</td>
+                                                            </tr>
+                                                            <% } %>
+
+
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <br><br><br>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+        </section>
+    </main>
+
+    <script>
+
+        let zoomer = function () {
+            document.querySelector('.product-image-slider figure')
+                .addEventListener('mousemove', function (e) {
+                    // Your existing zooming logic here
+                }, false);
+        }();
+
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize image zoom for all product images
+            var productImages = document.querySelectorAll('.image-zoom-container img');
+            productImages.forEach(function (img) {
+                new ImageZoom(img.parentNode, {
+                    scale: 2.0,
+                    zoomPosition: 'right'
+                });
+            });
+        });
+    </script>
+
+
+
+    <script>
+
+        function addToCart(id) {
+            $.ajax({
+                url: `/api/addToCart?id=${id}`,
+                method: "get",
+                success: (response) => {
+                    if (response.status) {
+                        Swal.fire({
+                            title: 'ADD TO CART',
+                            text: 'Product Added to cart',
+                            icon: 'success',
+                            timer: 1000,
+                            showConfirmButton: false // This removes the button
+                        }).then(() => {
+                            location.reload(); // Reload the page after adding the product to the cart
+                        });
+                    } else {
+                        if (response.error === 'Product already in the cart') {
+                            // Handle case where the product is already in the cart
+                            Swal.fire({
+                                title: "ALREADY SELECTED!",
+                                text: "The Product You already selected",
+                                icon: "error",
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Go to Cart'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = '/api/cart'; // Redirect the user to the cart page
+                                }
+                            });
+                        } else if (response.error === 'Product out of stock') {
+                            // Handle case where the product is out of stock
+                            Swal.fire({
+                                title: "OUT OF STOCK!",
+                                text: "The Product is out of stock",
+                                icon: "error",
+                                showConfirmButton: true
+                            });
+                        }
+                    }
+                }
+
+            })
+        }
+
+    </script>
+    <script>
+        function wishList(id) {
+            $.ajax({
+                url: `/api/addToList?id=${id}`,
+                method: "get",
+                success: (response) => {
+                    if (response.status) {
+                        Swal.fire({
+                            title: 'ADDED TO WISHLIST',
+                            text: 'You seleted a Product to the wisslist',
+                            icon: 'success',
+                            timer: 3000,
+
+
+                        },
+                            location.reload()
+                        )
+
+                    } else {
+                        Swal.fire({
+                            title: 'ALREADY SELECTED!',
+                            text: 'You already selected',
+                            icon: 'error',
+                            timer: 3000,
+
+
+                        })
+                    }
+
+                }
+            })
+
+
+
+        }
+
+    </script>
+    <%- include('../layout/footer.ejs' )%>

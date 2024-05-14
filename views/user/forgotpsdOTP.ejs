@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="/imgs/home/threads-logo.jpeg"
+    />
+    <title>THREADS | Womens Fashion</title>
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+  <body>
+    <div class="container">
+      <br />
+      <br />
+      <br />
+
+      <div class="row text-center">
+        <br />
+        <br />
+        <br />
+        <h4 class="">Verify OTP</h4>
+
+        <br />
+        <br />
+      </div>
+      <div class="row mt-5 justify-content-center">
+        <div class="col-lg-6">
+          <div
+            class="container height-100 d-flex justify-content-center align-items-center"
+          >
+            <div class="position-relative">
+              <div class="card p-2 text-center">
+                <h6>
+                  Please enter the one time password <br /><br />
+                  to verify your account
+                </h6>
+                <br />
+                <br />
+                <form action="/api/forgotPsdOTP" method="post">
+                  <div
+                    id="otp"
+                    class="inputs d-flex flex-row justify-content-center mt-2"
+                  >
+                    <input
+                      class="m-2 text-center form-control rounded"
+                      type="text"
+                      id="first"
+                      maxlength="1"
+                      name="first"
+                    />
+                    <input
+                      class="m-2 text-center form-control rounded"
+                      type="text"
+                      id="second"
+                      maxlength="1"
+                      name="second"
+                    />
+                    <input
+                      class="m-2 text-center form-control rounded"
+                      type="text"
+                      id="third"
+                      maxlength="1"
+                      name="third"
+                    />
+                    <input
+                      class="m-2 text-center form-control rounded"
+                      type="text"
+                      id="fourth"
+                      maxlength="1"
+                      name="fourth"
+                    />
+                    <input
+                      class="m-2 text-center form-control rounded"
+                      type="text"
+                      id="fifth"
+                      maxlength="1"
+                      name="fifth"
+                    />
+                    <input
+                      class="m-2 text-center form-control rounded"
+                      type="text"
+                      id="sixth"
+                      maxlength="1"
+                      name="six"
+                    />
+                  </div>
+                  <div class="mt-4">
+                    <button type="submit" class="btn btn-danger px-4 validate">
+                      Verify OTP
+                    </button>
+                  </div>
+                  <% if(locals.message == 'Invalid OTP Re-enter Correct OTP'){
+                  %>
+                  <p style="color: rgb(241, 2, 2)"><%= message %></p>
+                  <% } %>
+                </form>
+                <br />
+              </div>
+              <div class="otp-container">
+                <small id="timer"></small>
+                <a
+                  style="text-decoration: none; color: #ff0000"
+                  href="/api/forgotresendOTP?email=<%= locals.email %>"
+                  id="resend"
+                  ><span style="color: black">Didn't get the code</span> Resend
+                  OTP</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+    </div>
+    <script>
+      var timeLeft = 59;
+      var timer = document.getElementById("timer");
+      var resend = document.getElementById("resend");
+
+      timer.innerHTML = timeLeft + " seconds left";
+
+      var interval = setInterval(function () {
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          timer.innerHTML = "";
+          resend.style.display = "block";
+        } else {
+          timer.innerHTML = timeLeft + " seconds left";
+          resend.style.display = "none";
+        }
+        timeLeft -= 1;
+      }, 1000);
+
+      resend.onclick = function () {
+        timeLeft = 59;
+        resend.style.display = "none";
+        interval = setInterval(function () {
+          if (timeLeft <= 0) {
+            clearInterval(interval);
+            timer.innerHTML = "OTP expired";
+            resend.style.display = "block";
+          } else {
+            timer.innerHTML = timeLeft + " seconds left";
+          }
+          timeLeft -= 1;
+        }, 1000);
+      };
+    </script>
+  </body>
+</html>

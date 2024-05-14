@@ -1,0 +1,83 @@
+
+<%- include('../layout/admin-header.ejs' )%>
+
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Edit User </h2>
+                </div>
+                <div>
+                    <input type="text" placeholder="Search Categories" class="form-control bg-white">
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!--Catergory adding form-->
+                            <form method="post" action="/api/admin/editUser"   id="userEditForm">
+                                <div class="mb-4">
+                                    <label for="name" class="form-label"> First Name</label>
+                                    <input id="firstName" name="username"  value="<%-user.username %>" type="text" placeholder="First Name"
+                                        class="form-control"/>
+                                </div>
+                                <input type="text" hidden name="id" value="<%-user._id %>">
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Edit</button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div> <!-- card .// -->
+        </section> <!-- content-main end// -->
+      </main>
+    <script>
+       document.getElementById('userEditForm').addEventListener('submit',async(event)=>{
+        event.preventDefault();
+        
+            // Taking form data into a variable called formData
+
+            const formData = {
+                firstName:event.currentTarget.firstName.value,
+                lastName:event.currentTarget.lastName.value,
+                id:event.currentTarget.id.value,
+            }
+
+            const response = await fetch('./edit-users',{
+                method:'post',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify(formData)
+            })
+
+            const result = await response.json();
+
+            if(result.status === 'success'){
+                Toastify({
+                    text:result.message,
+                    className: "info",
+                    style: {
+                        background: "linear-gradient(to right, #082400, #96c93d)",
+                    }
+                    }).showToast();
+                    setTimeout(()=>{
+                        location.href = './list-users'
+                    },2000);
+            }else{
+                Toastify({
+                    text:result.message,
+                    className: "info",
+                    style: {
+                        background: "linear-gradient(to right, #240400, #ff4c00)",
+                    }
+                }).showToast();
+
+            }
+       })    
+       
+    
+    </script>
+   <%- include('../layout/admin-footer.ejs' )%>

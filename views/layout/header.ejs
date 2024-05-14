@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-login-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:26:06 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>THREADS | Womens Fashion</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/imgs/home/threads-logo.jpeg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
+    
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+
+
+</head>
+
+<body>
+    <header class="header-area header-style-5">
+        <div class="header-bottom sticky-bar sticky-white-bg">
+            <div class="container">
+                <div class="header-wrap header-space-between position-relative">
+                    <div class="logo logo-width-1">
+                        <a href="/api"><img src="/imgs/home/threads-logo.jpeg" alt="logo"></a>
+                    </div>
+                    <div class="main-menu main-menu-grow main-menu-padding-1 main-menu-lh-1 main-menu-mrg-1 hm3-menu-padding d-none d-lg-block hover-boder">
+                        <nav>
+                            <ul>
+                                <li><a class="active" href="/api">Home</a></li>
+                                <li><a href="#">Shop <i class="fi-rs-angle-down"></i></a>
+                                    <ul class="sub-menu">
+                                        <% for( let i=0; i < categories.length; i++ ) { %>
+                                            <li class="nav-item"><a class="nav-link filter-options"
+                                                    href="/api/shop/?name=<%- categories[i]._id %>"><%- categories[i].name %></a>
+                                            </li>
+                                            <% } %>
+                                        <li><a href="/api/shop">View All</a></li>
+                                    </ul>
+                                </li>
+                                <!-- <li><a href="">Accessories</a></li> -->
+                                <li><a href="">About Us</a></li>
+                                <li><a href="">Contact</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="header-action-right">
+                        <div class="search_input" id="search_input_box">
+                            <div class="container">
+                                <form class="d-flex justify-content-between" action="/api/search-sort/?">
+                                    <input type="text" class="form-control" id="search_input" placeholder="Search Here" name="search" value="%>">
+                                    <button type="submit" class="btn">Search</button>
+                                    <span class="lnr lnr-cross" id="close_search" title="Close Search"></span>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="header-action-2">
+                            <div class="header-action-icon-2">
+                                <a href="/api/Wishlist">
+                                    <img class="svgInject" alt="Evara" src="/imgs/theme/icons/icon-heart.svg">
+                                    <span id="wishlistItemCount" class="pro-count blue"></span>
+                                </a>
+                            </div>
+                            <div class="header-action-icon-2">
+                                <a class="mini-cart-icon" href="/api/cart">
+                                    <img alt="Evara" src="/imgs/theme/icons/icon-cart.svg">
+                                    <!-- <span class="pro-count blue">2</span> -->
+                                    <span id="cartItemCount" class="pro-count blue"></span>
+                                </a>
+                            </div>
+                            <div class="header-action-icon d-block d-lg-none">
+                                <div class="burger-icon">
+                                    <span class="burger-icon-top"></span>
+                                    <span class="burger-icon-mid"></span>
+                                    <span class="burger-icon-bottom"></span>
+                                </div>
+                            </div>
+                            <div class="login">
+                                <% if ( locals.user ) { %>
+                                    <ul><i class="fi-rs-user"></i><a href="/api/profile">Profile</a></ul>
+                                <% } else { %>
+                                    <ul><i class="fi-rs-user"></i><a href="/api/login">Log In</a></ul>
+                                <% } %>
+                                
+                                <!-- <ul ><i class="fi-rs-user"></i><a href="/api/login">Log In</a></ul> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-header-active mobile-header-wrapper-style">
+        <div class="mobile-header-wrapper-inner">
+            <div class="mobile-header-top">
+                <div class="mobile-header-logo">
+                    <a href="/api"><img src="/imgs/theme/Cyclo.jpg" alt="logo"></a>
+                </div>
+                <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
+                    <button class="close-style search-close">
+                        <i class="icon-top"></i>
+                        <i class="icon-bottom"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="mobile-header-content-area">
+                <div class="mobile-search search-style-3 mobile-header-border">
+                    <form action="#">
+                        <input type="text" placeholder="Search for items…">
+                        <button type="submit"><i class="fi-rs-search"></i></button>
+                    </form>
+                </div>
+                <div class="mobile-menu-wrap mobile-header-border">
+                    <div class="main-categori-wrap mobile-header-border">
+                        <a class="categori-button-active-2" href="#">
+                            <span class="fi-rs-apps"></span> Browse Categories
+                        </a>
+                        <div class="categori-dropdown-wrap categori-dropdown-active-small">
+                            <ul>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-dress"></i>Mountain Bikes</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-tshirt"></i>Hybrid Bikes</a></li>
+                                <li> <a href="shop-grid-right.html"><i class="evara-font-smartphone"></i> Road BIkes</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-desktop"></i>Accessories</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- mobile menu start -->
+                    <nav>
+                        <ul class="mobile-menu">
+                            <li class="menu-item-has-children"><a href="">Home</a></li>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="">shop</a>
+                                <ul class="dropdown">
+                                    <li><a href="/filter-products">Mountain Bikes</a></li>
+                                    <li><a href="shop-grid-left.html">Hybrid Bikes</a></li>
+                                    <li><a href="shop-list-right.html">Road BIkes</a></li>
+                                    <li><a href="shop-list-left.html">View All</a></li>
+                                 </li>
+                            <li class="menu-item-has-children"><a href="">Accessories</a></li>
+                            
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">About Us</a></li>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Contact</a></li>
+                        </ul>
+                    </nav>
+                    <!-- mobile menu end -->
+                </div>
+                <div class="mobile-header-info-wrap mobile-header-border">
+                    <div class="single-mobile-header-info mt-30">
+                        <a  href="page-contact.html"> Our location </a>
+                    </div>
+                    <div class="single-mobile-header-info">
+                        <a href="page-login-register.html">Log In / Sign Up </a>
+                    </div>
+                    <div class="single-mobile-header-info">
+                        <a href="#">(+01) - 2345 - 6789 </a>
+                    </div>
+                </div>
+                <div class="mobile-social-icon">
+                    <h5 class="mb-15 text-grey-4">Follow Us</h5>
+                    <a href="#"><img src="/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                    <a href="#"><img src="/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                    <a href="#"><img src="/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                    <a href="#"><img src="/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                    <a href="#"><img src="/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+    // Function to update the cart count
+    function updateCartCount() {
+        $.ajax({
+            url: '/api/getCartCount',
+            method: 'GET',
+            success: function(response) {
+                $('#cartItemCount').text(response.count);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching cart count:', error);
+            }
+        });
+    }
+
+    // Initial update of cart count when the page loads
+    updateCartCount();
+
+    // Optionally, you can update the cart count at regular intervals
+    // setInterval(updateCartCount, 5000); // Update every 5 seconds, for example
+});
+      $(document).ready(function(){
+        function updateWishlistCount() {
+            $.ajax({
+                url:'/api/getWishlistCount',
+                method:'GET',
+                success:function(response){
+                    $('#wishlistItemCount').text(response.count);
+                },
+                error:function(xhr,status,error){
+                    console.error('Error fetching cart count:', error);
+                }
+            })
+        }
+        updateWishlistCount();
+      })
+    </script>

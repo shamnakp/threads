@@ -1,0 +1,133 @@
+<%- include('../layout/header.ejs' )%>
+
+<main class="main">
+  <div class="page-header breadcrumb-wrap">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html" rel="nofollow">Home</a>
+        <span></span> Pages <span></span> Edit Address
+      </div>
+    </div>
+  </div>
+  <section class="pt-150 pb-150">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 m-auto">
+          <div class="row justify-content-center">
+            <div class="col-md-8">
+              <div class="tab-content dashboard-content">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>Edit Profile</h5>
+                  </div>
+                  <div class="card-body">
+                    <form
+                      name="editForm"
+                      method="post"
+                      action="/api/updateProfile"
+                      onsubmit="return validation()"
+                    >
+                      <div class="row">
+                        <div class="form-group col-md-12">
+                          <label><h5>Full Name</h5></label>
+                          <input
+                            required=""
+                            class="form-control square"
+                            value="<%= user.username %>"
+                            name="username"
+                            type="text"
+                          />
+                          <p id="nameError" style="color: red"></p>
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label><h5>Mobile number</h5></label>
+                          <input
+                            required=""
+                            class="form-control square"
+                            value="<%= user.mobile %>"
+                            name="mobile"
+                            type="text"
+                          />
+                          <p id="mobileError" style="color: red"></p>
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label><h5>Email</h5></label>
+                          <input
+                            required=""
+                            class="form-control square"
+                            value="<%= user.email %>"
+                            name="email"
+                            type="text"
+                          />
+                          <p id="emailError" style="color: red"></p>
+                        </div>
+                        <input type="hidden" name="id" value="<%=user._id %>" />
+
+                        <div class="col-md-12">
+                          <button
+                            type="submit"
+                            class="btn btn-fill-out submit"
+                            name="submit"
+                            value="Submit"
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  function validation() {
+    let name = document.forms["editForm"]["username"].value;
+    let mobile = document.forms["editForm"]["mobile"].value;
+    let email = document.forms["editForm"]["email"].value;
+
+    var usernameRegex = /^[A-Za-z\s]+$/;
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var mobileRegex = /^[0-9]+$/;
+
+    if (name.trim() === "") {
+      document.getElementById("nameError").innerText =
+        "Please enter a username.";
+      return false;
+    } else if (!name.match(usernameRegex)) {
+      document.getElementById("nameError").innerText =
+        "Username can only letters";
+      return false;
+    } else {
+      document.getElementById("nameError").innerText = "";
+    }
+
+    // Check if email is in proper format
+    if (!email.match(emailRegex)) {
+      document.getElementById("emailError").innerText =
+        "Please enter a valid email address.";
+      return false;
+    } else {
+      document.getElementById("emailError").innerText = "";
+    }
+
+    // Check if mobile number is filled out and in proper format
+    if (!mobile.match(mobileRegex)) {
+      document.getElementById("mobileError").innerText =
+        "Please enter a valid mobile number.";
+      return false;
+    } else {
+      document.getElementById("mobileError").innerText = "";
+    }
+
+    return true;
+  }
+</script>
+
+<%- include('../layout/footer.ejs' )%>
